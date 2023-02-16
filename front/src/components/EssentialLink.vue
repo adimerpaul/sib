@@ -1,10 +1,5 @@
 <template>
-  <q-item
-    clickable
-    tag="a"
-    target="_blank"
-    :href="link"
-  >
+  <q-item v-if="visible=='true'||this.$store.roles.includes(visible)" clickable :to="link" exact active-class="bg-primary text-white">
     <q-item-section
       v-if="icon"
       avatar
@@ -14,7 +9,7 @@
 
     <q-item-section>
       <q-item-label>{{ title }}</q-item-label>
-      <q-item-label caption>{{ caption }}</q-item-label>
+      <q-item-label caption class=" text-grey" >{{ caption }}</q-item-label>
     </q-item-section>
   </q-item>
 </template>
@@ -29,7 +24,10 @@ export default defineComponent({
       type: String,
       required: true
     },
-
+    visible: {
+      type: String,
+      required: false
+    },
     caption: {
       type: String,
       default: ''

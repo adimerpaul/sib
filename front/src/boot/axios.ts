@@ -30,11 +30,18 @@ export default boot(({ app, router }) => {
 
   app.config.globalProperties.$axios = axios
   app.config.globalProperties.$store = useCounterStore()
+  app.config.globalProperties.$url = import.meta.env.VITE_API_BACK
   // ^ ^ ^ this will allow you to use this.$axios (for Vue Options API form)
   //       so you won't necessarily have to import axios in each vue file
 
   app.config.globalProperties.$api = api
 
+  app.config.globalProperties.$api.get('cogs').then((res) => {
+    app.config.globalProperties.$store.nombre = res.data[0].value
+    app.config.globalProperties.$store.direccion = res.data[1].value
+    app.config.globalProperties.$store.telefono = res.data[2].value
+    app.config.globalProperties.$store.email = res.data[3].value
+  })
   const token = localStorage.getItem('tSib')
   if (token) {
     app.config.globalProperties.$api.defaults.headers.common.Authorization = `Bearer ${token}`

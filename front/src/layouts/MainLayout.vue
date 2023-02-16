@@ -15,12 +15,15 @@
           <q-img
             src="logo.png" width="50px"
           />
-          Sociedad de Ingenieros de Bolivia
+          {{ $store.nombre }}
         </q-toolbar-title>
 
         <div>
-          <q-btn flat dense round icon="account_circle" aria-label="Menu">
-          <q-menu>
+          <q-btn dense flat aria-label="Menu" no-caps icon-right="arrow_drop_down">
+          <q-avatar>
+            <q-img v-if="$store.user.avatar!=undefined"  :src="`${$url}../images/${$store.user.avatar}`" width="50px"/>
+          </q-avatar>
+            <q-menu>
               <q-list>
                 <q-item clickable v-ripple>
                   <q-item-section avatar>
@@ -56,7 +59,7 @@
                   </q-item-section>
                 </q-item>
               </q-list>
-          </q-menu>
+            </q-menu>
           </q-btn>
         </div>
       </q-toolbar>
@@ -68,10 +71,9 @@
       bordered
     >
       <q-list>
-        <q-item-label
-          header
-        >
-          Essential Links
+        <q-item-label class="text-center text-bold" header>
+          Opciones
+<!--          <pre>{{$store.roles}} a</pre>-->
         </q-item-label>
 
         <EssentialLink
@@ -92,51 +94,6 @@
 import { defineComponent } from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
 
-const linksList = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
-]
-
 export default defineComponent({
   name: 'MainLayout',
 
@@ -145,7 +102,29 @@ export default defineComponent({
   },
   data () {
     return {
-      essentialLinks: linksList,
+      essentialLinks: [
+        {
+          title: 'Principal',
+          caption: 'Inicio',
+          icon: 'o_home',
+          link: '/',
+          visible: 'true'
+        },
+        {
+          title: 'Colegiados',
+          caption: 'Colegiados',
+          icon: 'o_supervisor_account',
+          link: '/colegiados',
+          visible: 'administrador'
+        },
+        {
+          title: 'Certificados',
+          caption: 'Certificados',
+          icon: 'o_assignment',
+          link: '/certificados',
+          visible: 'socio'
+        }
+      ],
       leftDrawerOpen: false
     }
   },

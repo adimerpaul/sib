@@ -46,7 +46,7 @@ module.exports = configure(function (/* ctx */) {
       'themify',
       'line-awesome',
       'roboto-font-latin-ext', // this or either 'roboto-font', NEVER both!
-
+      'material-icons-outlined',
       'roboto-font', // optional, you are not bound to it
       'material-icons' // optional, you are not bound to it
     ],
@@ -91,9 +91,8 @@ module.exports = configure(function (/* ctx */) {
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#framework
     framework: {
       config: {},
-
       // iconSet: 'material-icons', // Quasar icon set
-      // lang: 'en-US', // Quasar language pack
+      lang: 'es', // Quasar language pack
 
       // For special cases outside of where the auto-import strategy can have an impact
       // (like functional components as one of the examples),

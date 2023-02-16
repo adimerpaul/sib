@@ -11,6 +11,11 @@
               <q-card-section>
                 <q-form @submit="login">
                   <div class="row">
+                    <div class="col-12 text-center q-pb-xs">
+                      <q-avatar size="100px" class="bg-primary">
+                        <img src="logo.png">
+                      </q-avatar>
+                    </div>
                     <div class="col-12">
                       <q-input outlined v-model="user.email" label="Email" type="email" :rules="[val => val && val.length > 0 || 'Email requerido']" />
                     </div>

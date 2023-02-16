@@ -38,4 +38,38 @@ class UserController extends Controller
         $user = User::where('id', $request->user()->id)->with('roles')->first();
         return $user;
     }
+    public function index(){
+        return User::with('roles')->where('id','!=',1)->get();
+    }
+    public function show($id){return User::with('roles')->find($id);}
+    public function store(Request $request){
+        $this->validate($request, [
+            'name' => 'required',
+            'email' => 'required|email|unique:users',
+            'password' => 'required'
+        ]);
+        $request->merge(['password' => bcrypt($request->password)]);
+        $user=User::create($request->all());
+        $user->assignRole($request->roles);
+        return $user;
+    }
+    public function update(Request $request, $id){
+        $this->validate($request, [
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email,'.$id,
+        ]);
+        $user=User::find($id);
+        $user->update($request->all());
+        $user->syncRoles($request->roles);
+        return $user;
+    }
+    public function userResetPassword(Request $request, $id){
+        $this->validate($request, [
+            'password' => 'required'
+        ]);
+        $user=User::find($id);
+        $user->update(['password' => bcrypt($request->password)]);
+        return $user;
+    }
+    public function destroy($id){return User::destroy($id);}
 }

@@ -5,7 +5,11 @@ export const useCounterStore = defineStore('counter', {
     counter: 0,
     isLogged: !!localStorage.getItem('tSib'),
     user: {},
-    roles: []
+    roles: [],
+    nombre: '',
+    direccion: '',
+    telefono: '',
+    email: ''
   }),
   getters: {
     doubleCount: (state) => state.counter * 2
