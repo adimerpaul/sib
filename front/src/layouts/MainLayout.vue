@@ -1,6 +1,6 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
+    <q-header>
       <q-toolbar>
         <q-btn
           flat
@@ -38,13 +38,13 @@
                     </q-item-label>
                   </q-item-section>
                 </q-item>
-                <q-item clickable v-ripple>
+                <q-item clickable v-ripple v-if="$store.roles.includes('socio')" to="/datos">
                   <q-item-section avatar>
-                    <q-icon name="settings" />
+                    <q-icon name="switch_account" />
                   </q-item-section>
                   <q-item-section>
                     <q-item-label>
-                      Configuración
+                      Mis datos
                     </q-item-label>
                   </q-item-section>
                 </q-item>
@@ -121,6 +121,20 @@ export default defineComponent({
           icon: 'o_supervisor_account',
           link: '/colegiados',
           visible: 'administrador'
+        },
+        {
+          title: 'Mis datos',
+          caption: 'Mis datos',
+          icon: 'o_switch_account',
+          link: '/datos',
+          visible: 'socio'
+        },
+        {
+          title: 'Mis Documentos',
+          caption: 'Mis Documentos',
+          icon: 'o_inventory_2',
+          link: '/seguimientos',
+          visible: 'socio'
         },
         {
           title: 'Certificados',

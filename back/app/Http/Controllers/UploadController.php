@@ -13,20 +13,27 @@ class UploadController extends Controller
         $fileName = substr(json_encode($request->all()), 2, -5);
         $file = $request->file($fileName);
         $name = time().$file->getClientOriginalName();
-        $ruta=public_path('/images/'.$name);
-        Image::make($file->getRealPath())
-            ->resize(300,300
-                ,function ($constraint){
-                    $constraint->aspectRatio();
-                }
-            )
-            ->save($ruta,72);
         if ($type=='shopUser'){
+            $ruta=public_path('/images/'.$name);
+            Image::make($file->getRealPath())
+                ->resize(300,300
+                    ,function ($constraint){
+                        $constraint->aspectRatio();
+                    }
+                )
+                ->save($ruta,72);
             $shop=Shop::find($id);
             $shop->avatar=$name;
             $shop->save();
+            return $name;
         }
-        return $name;
+        if ($type=='fileCreate'){
+            error_log($name);
+            $ruta=public_path('/files/');
+            $file->move($ruta,$name);
+            return $name;
+        }
+
     }
     public function base64($photo){
         $path = public_path('/images/'.$photo);

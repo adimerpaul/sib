@@ -42,7 +42,12 @@ class UserController extends Controller
         return User::with('roles')->where('id','!=',1)->get();
     }
     public function show($type){
-        return User::with('roles')->where('id','!=',1)->where('type',$type)->get();
+        $user = User::where('id', $type)->with('roles')->first();
+        if ($user) {
+            return $user;
+        } else {
+            return User::with('roles')->where('id','!=',1)->where('type',$type)->get();
+        }
     }
     public function store(Request $request){
         $this->validate($request, [
