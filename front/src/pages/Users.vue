@@ -2,9 +2,10 @@
 <q-page>
   <div class="row">
     <div class="col-12">
-      <q-table :loading="loading" title="Colegiados" dense bordered flat :filter="colegiadoSearch" :rows="users" :columns="userColumns" :rows-per-page-options="[0]">
+      <q-table :loading="loading" title="Usuarios" dense bordered flat :filter="colegiadoSearch" :rows="users" :columns="userColumns" :rows-per-page-options="[0]">
         <template v-slot:top-right>
           <q-btn @click="userAdd" color="primary" icon="add_circle_outline" dense label="Agregar" no-caps />
+          <q-btn @click="getUsers" icon="refresh" dense flat round />
           <q-input dense outlined v-model="colegiadoSearch" label="Buscar" clearable>
             <template v-slot:append>
               <q-icon name="search" />
@@ -51,17 +52,17 @@
       </q-table>
     </div>
   </div>
-  <q-dialog v-model="userDialog" full-width>
+  <q-dialog v-model="userDialog">
     <q-card>
       <q-card-section class="row items-center q-pb-none">
-        <div class="text-subtitle2"> {{userCreate=='create' ? 'Agregar' : 'Editar'}} Colegiado </div>
+        <div class="text-subtitle2"> {{userCreate=='create' ? 'Agregar' : 'Editar'}} Usuario </div>
         <q-space />
         <q-btn icon="close" flat round dense v-close-popup />
       </q-card-section>
       <q-card-section class="q-pt-none">
         <q-form @submit="userSave">
         <div class="row">
-        <div class="col-12 col-md-6">
+        <div class="col-12">
           <div class="row">
             <div class="col-6">
               <q-input outlined dense v-model="user.name" label="Nombre" :rules="[val => val && Object.keys(val).length > 0 || 'Nombre requerido']" />
@@ -97,81 +98,6 @@
                 stack-label="upload image"/>
             </div>
             <div class="col-2">
-              <q-input outlined dense v-model="user.rni" label="rni" hint="" />
-            </div>
-            <div class="col-2">
-              <q-input outlined dense v-model="user.libro" label="libro" hint="" />
-            </div>
-            <div class="col-2">
-              <q-input outlined dense v-model="user.categoria" label="categoria" hint="" />
-            </div>
-            <div class="col-2">
-              <q-input outlined dense v-model="user.renovacion" label="renovacion" hint="" />
-            </div>
-            <div class="col-2">
-              <q-input outlined dense v-model="user.tipoCodumento" label="tipoCodumento" hint="" />
-            </div>
-            <div class="col-2">
-              <q-input outlined dense v-model="user.emitido" label="emitido" hint="" />
-            </div>
-            <div class="col-2">
-              <q-input outlined dense v-model="user.genero" label="genero" hint="" />
-            </div>
-            <div class="col-2">
-              <q-input outlined dense type="date" v-model="user.fechaNac" label="fechaNac" hint="" />
-            </div>
-            <div class="col-2">
-              <q-input outlined dense v-model="user.paginas" label="paginas" hint="" />
-            </div>
-            <div class="col-2">
-              <q-input outlined dense v-model="user.nivel" label="nivel" hint="" />
-            </div>
-            <div class="col-2">
-              <q-input outlined dense type="date" v-model="user.fechaInscripcion" label="fechaInscripcion" hint="" />
-            </div>
-            <div class="col-2">
-              <q-input outlined dense type="date" v-model="user.fechaValido" label="fechaValido" hint="" />
-            </div>
-            <div class="col-2">
-              <q-input outlined dense v-model="user.ci" label="ci" hint="" />
-            </div>
-            <div class="col-2">
-              <q-input outlined dense v-model="user.ciAnverso" label="ciAnverso" hint="" />
-            </div>
-            <div class="col-2">
-              <q-input outlined dense v-model="user.ciReverso" label="ciReverso" hint="" />
-            </div>
-            <div class="col-2">
-              <q-input outlined dense v-model="user.ciudad" label="ciudad" hint="" />
-            </div>
-            <div class="col-2">
-              <q-input outlined dense v-model="user.departamento" label="departamento" hint="" />
-            </div>
-            <div class="col-2">
-              <q-input outlined dense v-model="user.municipio" label="municipio" hint="" />
-            </div>
-            <div class="col-2">
-              <q-input outlined dense v-model="user.barrio" label="barrio" hint="" />
-            </div>
-            <div class="col-2">
-              <q-input outlined dense v-model="user.direccion" label="direccion" hint="" />
-            </div>
-            <div class="col-2">
-              <q-input outlined dense v-model="user.telefono" label="telefono" hint="" />
-            </div>
-            <div class="col-2">
-              <q-input outlined dense v-model="user.celular" label="celular" hint="" />
-            </div>
-            <div class="col-2">
-              <q-input outlined dense v-model="user.web" label="web" hint="" />
-            </div>
-            <div class="col-2">
-              <q-input outlined dense v-model="user.skype" label="skype" hint="" />
-            </div>
-            <div class="col-2">
-              <q-input outlined dense v-model="user.facebook" label="facebook" hint="" />
-            </div>
-            <div class="col-2" hidden>
               <div class="text-subtitle2 text-grey">Roles</div>
               <q-option-group
                 dense
@@ -181,22 +107,6 @@
                 type="checkbox"
               />
             </div>
-          </div>
-        </div>
-        <div class="col-12 col-md-6">
-          <div class="text-grey text-bold text-subtitle2"> Mover el marker para seleccionar la ubicación </div>
-          <div style="height:500px" class="items-center">
-            <l-map ref="map" @click="clickMaps" :zoom="13" :maxZoom="17" :center="[-17.970, -67.1111 ]" >
-              <l-tile-layer
-                :url="styleMap?`https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png`:`https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}`"
-                layer-type="base"
-                name="OpenStreetMap"
-              ></l-tile-layer>
-              <l-marker :lat-lng="markerLatLng" @moveend="ondragend" draggable  ></l-marker>
-              <l-control position="topright" >
-                <q-btn @click="styleMap=!styleMap" icon="map" class="bg-primary text-white" dense round></q-btn>
-              </l-control>
-            </l-map>
           </div>
         </div>
         </div>
@@ -213,17 +123,10 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { LMap, LTileLayer, LMarker, LControl } from '@vue-leaflet/vue-leaflet'
 import 'leaflet/dist/leaflet.css'
 import { date } from 'quasar'
 export default defineComponent({
-  name: 'ColegiadosPage',
-  components: {
-    LMap,
-    LTileLayer,
-    LMarker,
-    LControl
-  },
+  name: 'UsersPage',
   data () {
     return {
       styleMap: true,
@@ -249,7 +152,7 @@ export default defineComponent({
         { name: 'options', field: 'options', label: 'Opciones', align: 'center', sortable: false, style: 'width: 100px' },
         { name: 'name', label: 'Nombre', field: 'name', align: 'left', sortable: true },
         { name: 'email', label: 'Email', field: 'email', align: 'left', sortable: true },
-        { name: 'location', label: 'Ubicación', field: 'location', align: 'left', sortable: true },
+        { name: 'rolesLabel', label: 'Roles', field: 'rolesLabel', align: 'left', sortable: true },
         { name: 'avatar', label: 'Avatar', field: 'avatar', align: 'left', sortable: true }
       ]
     }
@@ -352,14 +255,16 @@ export default defineComponent({
     },
     getUsers () {
       this.loading = true
-      this.$api.get('users/colegiado').then((response) => {
+      this.$api.get('users/usuario').then((response) => {
         this.loading = false
         this.users = []
         response.data.forEach((item) => {
           const roles = item.roles.map((role) => role.id)
+          const rolesLabel = item.roles.map((role) => role.name)
           item.roles = []
           roles.forEach((role) => {
             item.roles.push(role)
+            item.rolesLabel = rolesLabel.join(', ')
           })
           this.users.push(item)
         })
@@ -384,7 +289,6 @@ export default defineComponent({
       this.loading = true
       this.user.lat = this.markerLatLng[0] === undefined ? this.markerLatLng.lat : this.markerLatLng[0]
       this.user.lng = this.markerLatLng[1] === undefined ? this.markerLatLng.lng : this.markerLatLng[1]
-      this.user.type = 'colegiado'
       if (this.userCreate === 'create') {
         this.$api.post('users', this.user).then(() => {
           this.loading = false

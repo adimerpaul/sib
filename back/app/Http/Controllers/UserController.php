@@ -41,7 +41,9 @@ class UserController extends Controller
     public function index(){
         return User::with('roles')->where('id','!=',1)->get();
     }
-    public function show($id){return User::with('roles')->find($id);}
+    public function show($type){
+        return User::with('roles')->where('id','!=',1)->where('type',$type)->get();
+    }
     public function store(Request $request){
         $this->validate($request, [
             'name' => 'required',

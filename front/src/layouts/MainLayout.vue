@@ -72,10 +72,8 @@
     >
       <q-list>
         <q-item-label class="text-center text-bold" header>
-          Opciones
-<!--          <pre>{{$store.roles}} a</pre>-->
+          Usuario: {{$store.user.name}}
         </q-item-label>
-
         <EssentialLink
           v-for="link in essentialLinks"
           :key="link.title"
@@ -109,6 +107,13 @@ export default defineComponent({
           icon: 'o_home',
           link: '/',
           visible: 'true'
+        },
+        {
+          title: 'Usuarios',
+          caption: 'Usuarios',
+          icon: 'o_supervisor_account',
+          link: '/users',
+          visible: 'administrador'
         },
         {
           title: 'Colegiados',

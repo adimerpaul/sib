@@ -31,6 +31,17 @@ export default route(function (/* { store, ssrContext } */) {
     // quasar.conf.js -> build -> publicPath
     history: createHistory(process.env.VUE_ROUTER_BASE)
   })
-
+  Router.beforeEach((to, from, next) => {
+    const token = localStorage.getItem('tSib')
+    if (to.matched.some((record) => record.meta.requiresAuth)) {
+      if (!token) {
+        next('/login')
+      } else {
+        next()
+      }
+    } else {
+      next()
+    }
+  })
   return Router
 })

@@ -45,6 +45,7 @@ return new class extends Migration
             $table->string('lat')->nullable();
             $table->string('lng')->nullable();
             $table->string('email')->unique();
+            $table->string('type')->default('usuario');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

@@ -4,14 +4,16 @@ import IndexPage from 'pages/IndexPage.vue'
 import Login from 'pages/Login.vue'
 import Colegiados from 'pages/Colegiados.vue'
 import Certificados from 'pages/Certificados.vue'
+import Users from 'pages/Users.vue'
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
     component: MainLayout,
     children: [
-      { path: '', component: IndexPage },
-      { path: 'colegiados', component: Colegiados },
-      { path: 'certificados', component: Certificados }
+      { path: '', component: IndexPage, meta: { requiresAuth: true } },
+      { path: 'colegiados', component: Colegiados, meta: { requiresAuth: true } },
+      { path: 'certificados', component: Certificados, meta: { requiresAuth: true } },
+      { path: 'users', component: Users, meta: { requiresAuth: true } }
     ]
   },
   {
