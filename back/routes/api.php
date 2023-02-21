@@ -25,6 +25,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::apiResource('users', \App\Http\Controllers\UserController::class);
     Route::apiResource('roles', \App\Http\Controllers\RoleController::class);
     Route::apiResource('files', \App\Http\Controllers\FileController::class);
+    Route::apiResource('sales', \App\Http\Controllers\SaleController::class);
+    Route::post('getSales', [\App\Http\Controllers\SaleController::class,'getSales']);
     Route::put('userResetPassword/{id}', [\App\Http\Controllers\UserController::class,'userResetPassword']);
     Route::post('logout', [\App\Http\Controllers\UserController::class,'logout']);
     Route::post('me', [\App\Http\Controllers\UserController::class,'me']);

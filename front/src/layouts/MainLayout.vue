@@ -137,6 +137,13 @@ export default defineComponent({
           visible: 'socio'
         },
         {
+          title: 'Modulo de ingresos y egresos',
+          caption: 'Modulo de ingresos y egresos',
+          icon: 'o_attach_money',
+          link: '/ingresos',
+          visible: 'contador'
+        },
+        {
           title: 'Certificados',
           caption: 'Certificados',
           icon: 'o_assignment',
