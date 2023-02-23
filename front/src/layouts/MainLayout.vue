@@ -144,6 +144,13 @@ export default defineComponent({
           visible: 'contador'
         },
         {
+          title: 'Modulo de activos fijos',
+          caption: 'Modulo de activos fijos',
+          icon: 'o_business_center',
+          link: '/activos',
+          visible: 'contador'
+        },
+        {
           title: 'Certificados',
           caption: 'Certificados',
           icon: 'o_assignment',
