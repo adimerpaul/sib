@@ -156,6 +156,13 @@ export default defineComponent({
           icon: 'o_assignment',
           link: '/certificados',
           visible: 'socio'
+        },
+        {
+          title: 'Cargos',
+          caption: 'Cargos',
+          icon: 'manage_accounts',
+          link: '/cargos',
+          visible: 'socio'
         }
       ],
       leftDrawerOpen: false

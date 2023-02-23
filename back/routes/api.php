@@ -26,6 +26,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::apiResource('roles', \App\Http\Controllers\RoleController::class);
     Route::apiResource('files', \App\Http\Controllers\FileController::class);
     Route::apiResource('sales', \App\Http\Controllers\SaleController::class);
+    Route::apiResource('inventories', \App\Http\Controllers\InventoryController::class);
+    Route::apiResource('charges', \App\Http\Controllers\ChargeController::class);
+    Route::apiResource('employees', \App\Http\Controllers\EmployeeController::class);
+    Route::apiResource('poyrolls', \App\Http\Controllers\PayrollController::class);
     Route::post('getSales', [\App\Http\Controllers\SaleController::class,'getSales']);
     Route::post('anularSale', [\App\Http\Controllers\SaleController::class,'anularSale']);
     Route::put('userResetPassword/{id}', [\App\Http\Controllers\UserController::class,'userResetPassword']);

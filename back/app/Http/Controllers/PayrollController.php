@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Inventory;
-use App\Http\Requests\StoreInventoryRequest;
-use App\Http\Requests\UpdateInventoryRequest;
+use App\Models\Payroll;
+use App\Http\Requests\StorePayrollRequest;
+use App\Http\Requests\UpdatePayrollRequest;
 
-class InventoryController extends Controller
+class PayrollController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +16,6 @@ class InventoryController extends Controller
     public function index()
     {
         //
-        return Inventory::all();
     }
 
     /**
@@ -32,10 +31,10 @@ class InventoryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreInventoryRequest  $request
+     * @param  \App\Http\Requests\StorePayrollRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreInventoryRequest $request)
+    public function store(StorePayrollRequest $request)
     {
         //
     }
@@ -43,10 +42,10 @@ class InventoryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Inventory  $inventory
+     * @param  \App\Models\Payroll  $payroll
      * @return \Illuminate\Http\Response
      */
-    public function show(Inventory $inventory)
+    public function show(Payroll $payroll)
     {
         //
     }
@@ -54,10 +53,10 @@ class InventoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Inventory  $inventory
+     * @param  \App\Models\Payroll  $payroll
      * @return \Illuminate\Http\Response
      */
-    public function edit(Inventory $inventory)
+    public function edit(Payroll $payroll)
     {
         //
     }
@@ -65,11 +64,11 @@ class InventoryController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateInventoryRequest  $request
-     * @param  \App\Models\Inventory  $inventory
+     * @param  \App\Http\Requests\UpdatePayrollRequest  $request
+     * @param  \App\Models\Payroll  $payroll
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateInventoryRequest $request, Inventory $inventory)
+    public function update(UpdatePayrollRequest $request, Payroll $payroll)
     {
         //
     }
@@ -77,10 +76,10 @@ class InventoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Inventory  $inventory
+     * @param  \App\Models\Payroll  $payroll
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Inventory $inventory)
+    public function destroy(Payroll $payroll)
     {
         //
     }

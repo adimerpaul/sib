@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Inventory;
-use App\Http\Requests\StoreInventoryRequest;
-use App\Http\Requests\UpdateInventoryRequest;
+use App\Models\Employee;
+use App\Http\Requests\StoreEmployeeRequest;
+use App\Http\Requests\UpdateEmployeeRequest;
 
-class InventoryController extends Controller
+class EmployeeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +16,7 @@ class InventoryController extends Controller
     public function index()
     {
         //
-        return Inventory::all();
+        return Employee::with('cargo')->get();
     }
 
     /**
@@ -32,21 +32,22 @@ class InventoryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreInventoryRequest  $request
+     * @param  \App\Http\Requests\StoreEmployeeRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreInventoryRequest $request)
+    public function store(StoreEmployeeRequest $request)
     {
         //
+        return Employee::create($request->all());
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Inventory  $inventory
+     * @param  \App\Models\Employee  $employee
      * @return \Illuminate\Http\Response
      */
-    public function show(Inventory $inventory)
+    public function show(Employee $employee)
     {
         //
     }
@@ -54,10 +55,10 @@ class InventoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Inventory  $inventory
+     * @param  \App\Models\Employee  $employee
      * @return \Illuminate\Http\Response
      */
-    public function edit(Inventory $inventory)
+    public function edit(Employee $employee)
     {
         //
     }
@@ -65,23 +66,26 @@ class InventoryController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateInventoryRequest  $request
-     * @param  \App\Models\Inventory  $inventory
+     * @param  \App\Http\Requests\UpdateEmployeeRequest  $request
+     * @param  \App\Models\Employee  $employee
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateInventoryRequest $request, Inventory $inventory)
+    public function update(UpdateEmployeeRequest $request, Employee $employee)
     {
         //
+        return $employee->update($request->all());
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Inventory  $inventory
+     * @param  \App\Models\Employee  $employee
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Inventory $inventory)
+    public function destroy(Employee $employee)
     {
         //
+        return $employee->delete();
+
     }
 }

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Inventory;
-use App\Http\Requests\StoreInventoryRequest;
-use App\Http\Requests\UpdateInventoryRequest;
+use App\Models\Charge;
+use App\Http\Requests\StoreChargeRequest;
+use App\Http\Requests\UpdateChargeRequest;
 
-class InventoryController extends Controller
+class ChargeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +16,7 @@ class InventoryController extends Controller
     public function index()
     {
         //
-        return Inventory::all();
+        return Charge::all();
     }
 
     /**
@@ -32,21 +32,23 @@ class InventoryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreInventoryRequest  $request
+     * @param  \App\Http\Requests\StoreChargeRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreInventoryRequest $request)
+    public function store(StoreChargeRequest $request)
     {
         //
+        return Charge::create($request->all());
+
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Inventory  $inventory
+     * @param  \App\Models\Charge  $charge
      * @return \Illuminate\Http\Response
      */
-    public function show(Inventory $inventory)
+    public function show(Charge $charge)
     {
         //
     }
@@ -54,10 +56,10 @@ class InventoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Inventory  $inventory
+     * @param  \App\Models\Charge  $charge
      * @return \Illuminate\Http\Response
      */
-    public function edit(Inventory $inventory)
+    public function edit(Charge $charge)
     {
         //
     }
@@ -65,23 +67,25 @@ class InventoryController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateInventoryRequest  $request
-     * @param  \App\Models\Inventory  $inventory
+     * @param  \App\Http\Requests\UpdateChargeRequest  $request
+     * @param  \App\Models\Charge  $charge
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateInventoryRequest $request, Inventory $inventory)
+    public function update(UpdateChargeRequest $request, Charge $charge)
     {
         //
+        return $charge->update($request->all());
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Inventory  $inventory
+     * @param  \App\Models\Charge  $charge
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Inventory $inventory)
+    public function destroy(Charge $charge)
     {
         //
+        return $charge->delete();
     }
 }
