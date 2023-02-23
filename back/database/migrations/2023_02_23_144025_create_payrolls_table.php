@@ -15,6 +15,16 @@ return new class extends Migration
     {
         Schema::create('payrolls', function (Blueprint $table) {
             $table->id();
+            $table->date('fecha');
+            $table->string('mes');
+            $table->string('anio');
+            $table->double('salario');
+            $table->double('bonificacion');
+            $table->double('descuento');
+            $table->integer('days');
+            $table->double('total');
+            $table->unsignedBigInteger('employee_id')->nullable();
+            $table->foreign('employee_id')->references('id')->on('employees');
             $table->timestamps();
         });
     }
