@@ -19,7 +19,14 @@ class SaleController extends Controller{
         return Sale::whereDate('date', '>=', $request->dateIni)
             ->whereDate('date', '<=', $request->dateEnd)
             ->orderBy('id', 'desc')
+            ->with('user')
             ->get();
+    }
+    public function anularSale(Request $request){
+        $sale = Sale::find($request->id);
+        $sale->status = 'Anulado';
+        $sale->save();
+        return $sale;
     }
     public function show(Sale $sale){ return $sale;}
     public function update(UpdateSaleRequest $request, Sale $sale){return $sale->update($request->all());}

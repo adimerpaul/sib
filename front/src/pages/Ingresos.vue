@@ -14,12 +14,52 @@
         </div>
       </div>
     </div>
+    <div class="col-12 col-md-4">
+      <q-card bordered flat>
+        <q-item >
+          <q-item-section avatar >
+            <q-avatar square  icon="local_atm" color="green-1" text-color="green" size="60px" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label class="text-subtitle2 text-grey">Ingresos totales</q-item-label>
+            <q-item-label class="text-h5 text-green">{{ingresoSum}} Bs</q-item-label>
+          </q-item-section>
+        </q-item>
+      </q-card>
+    </div>
+    <div class="col-12 col-md-4">
+      <q-card bordered flat>
+        <q-item >
+          <q-item-section avatar >
+            <q-avatar square  icon="local_atm" color="red-1" text-color="red" size="60px" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label class="text-subtitle2 text-grey">Egresos totales</q-item-label>
+            <q-item-label class="text-h5 text-red">{{egresoSum}} Bs</q-item-label>
+          </q-item-section>
+        </q-item>
+      </q-card>
+    </div>
+    <div class="col-12 col-md-4">
+      <q-card bordered flat>
+        <q-item >
+          <q-item-section avatar >
+            <q-avatar square  icon="local_atm" color="blue-1" text-color="blue" size="60px" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label class="text-subtitle2 text-grey">Saldo</q-item-label>
+            <q-item-label class="text-h5 text-blue">{{ingresoSum-egresoSum}} Bs</q-item-label>
+          </q-item-section>
+        </q-item>
+      </q-card>
+    </div>
     <div class="col-12">
       <q-table :loading="loading" :rows-per-page-options="[0]" :rows="sales" flat bordered dense :search="salesSearch" :columns="saleColumns">
         <template v-slot:top-right>
           <q-btn color="green" label="Crear Ingreso" no-caps icon="add_circle_outline" @click="addIngreso" dense />
           <q-btn color="red" label="Crear Egreso" no-caps icon="add_circle_outline" @click="addEgreso" dense />
           <q-btn flat round icon="refresh" @click="getSales" dense />
+          <q-btn flat round icon="o_download" @click="exportSales" dense />
           <q-input outlined dense v-model="salesSearch" label="Buscar" class="q-ml-md" clearable>
             <template v-slot:append>
               <q-icon name="search" />
@@ -29,7 +69,7 @@
         <template v-slot:body-cell-actions="props">
           <q-td :props="props" auto-width>
 <!--            <q-btn flat round icon="o_print" dense color="primary" title="Imprimir"/>-->
-            <q-btn flat round @click="anularSale(props.row)" icon="highlight_off" dense color="red" title="Anular"/>
+            <q-btn flat size="11px" class="q-pa-none q-ma-none" round @click="anularSale(props.row)" icon="highlight_off" dense color="red" title="Anular" v-if="props.row.status==='Cancelado'"/>
           </q-td>
         </template>
         <template v-slot:body-cell-amount="props">
@@ -73,16 +113,15 @@
       </q-card-section>
     </q-card>
   </q-dialog>
-  <div id="myElement">
-    hola
-  </div>
+  <div id="myElement" class="hidden"></div>
 </q-page>
 </template>
 
 <script>
+import xlsx from 'json-as-xlsx'
 import { date } from 'quasar'
 import { Printd } from 'printd'
-// import { Recibo } from 'src/addons/Recibo'
+import { Recibo } from 'src/addons/Recibo'
 export default {
   name: 'IngresosPage',
   data () {
@@ -107,19 +146,42 @@ export default {
         { name: 'name', label: 'Nombre', field: 'name', align: 'left', sortable: true },
         { name: 'status', label: 'Estado', field: 'status', align: 'left', sortable: true },
         { name: 'date', label: 'Fecha', field: 'date', align: 'left', sortable: true },
-        { name: 'time', label: 'Hora', field: 'time', align: 'left', sortable: true }
+        { name: 'time', label: 'Hora', field: 'time', align: 'left', sortable: true },
+        { name: 'user', label: 'Usuario', field: (row) => row.user.name, align: 'left', sortable: true }
       ]
     }
   },
   created () {
     this.getSales()
   },
-  mounted () {
-    // const recido = new Recibo()
-    // document.getElementById('myElement').innerHTML = recido.print()
-    // this.d.print(document.getElementById('myElement'))
-  },
   methods: {
+    exportSales () {
+      const data = [
+        {
+          sheet: 'Adults',
+          columns: [
+            { label: 'N', value: 'id' },
+            { label: 'Nombre', value: 'name' },
+            { label: 'Monto', value: 'amount' },
+            { label: 'Estado', value: 'status' },
+            { label: 'Fecha', value: 'date' },
+            { label: 'Hora', value: 'time' },
+            { label: 'Usuario', value: (row) => row.user.name }
+          ],
+          content: this.sales
+        }
+      ]
+
+      const settings = {
+        fileName: 'MySpreadsheet', // Name of the resulting spreadsheet
+        extraLength: 3, // A bigger number means that columns will be wider
+        writeMode: 'writeFile', // The available parameters are 'WriteFile' and 'write'. This setting is optional. Useful in such cases https://docs.sheetjs.com/docs/solutions/output#example-remote-file
+        writeOptions: {} // Style options from https://docs.sheetjs.com/docs/api/write-options
+        // RTL: true // Display the columns from right-to-left (the default value is false)
+      }
+
+      xlsx(data, settings) // Will download the excel file
+    },
     anularSale (sale) {
       this.$q.dialog({
         title: 'Anular',
@@ -148,6 +210,12 @@ export default {
         console.log(response)
         this.saleDialog = false
         this.getSales()
+
+        const recibo = new Recibo()
+        recibo.note(response.data).then(res => {
+          document.getElementById('myElement').innerHTML = res
+          this.d.print(document.getElementById('myElement'))
+        })
       }).catch((error) => {
         console.log(error)
       }).finally(() => {
@@ -170,7 +238,7 @@ export default {
     addIngreso () {
       this.saleDialog = true
       this.sale = {
-        name: '',
+        name: 'INGRESO POR VENTA',
         amount: '',
         status: 'Cancelado',
         type: 'Ingreso',
@@ -180,7 +248,7 @@ export default {
     addEgreso () {
       this.saleDialog = true
       this.sale = {
-        name: '',
+        name: 'EGRESO POR COMPRA',
         amount: '',
         date: date.formatDate(new Date(), 'YYYY-MM-DD'),
         status: 'Cancelado',
@@ -188,27 +256,29 @@ export default {
         description: '',
         user_id: this.$store.user.id
       }
-    },
-    editIngreso (row) {
-      this.$router.push({ name: 'Ingreso', params: { id: row.id } })
-    },
-    deleteIngreso (row) {
-      this.$q.dialog({
-        title: 'Eliminar',
-        message: '¿Está seguro de eliminar el registro?',
-        cancel: true,
-        persistent: true
-      }).onOk(() => {
-        this.loading = true
-        this.$api.delete('/sales/' + row.id).then((response) => {
-          console.log(response.data)
-          this.getSales()
-        }).catch((error) => {
-          console.log(error)
-        }).finally(() => {
-          this.loading = false
-        })
+    }
+  },
+  computed: {
+    ingresoSum () {
+      let sum = 0
+      this.sales.forEach(sale => {
+        if (sale.type === 'Ingreso' && sale.status === 'Cancelado') {
+          sum += parseFloat(sale.amount)
+        }
       })
+      return Math.round(sum * 100) / 100
+    },
+    egresoSum () {
+      let sum = 0
+      this.sales.forEach(sale => {
+        if (sale.type === 'Egreso' && sale.status === 'Cancelado') {
+          sum += parseFloat(sale.amount)
+        }
+      })
+      return Math.round(sum * 100) / 100
+    },
+    saldo () {
+      return this.ingresoSum - this.egresoSum
     }
   }
 }
