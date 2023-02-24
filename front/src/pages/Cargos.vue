@@ -41,11 +41,24 @@
           </q-card-section>
         </q-card>
       </q-dialog>
+      <q-dialog v-model="dialogExcel" >
+        <q-card style="min-width: 350px">
+          <q-card-section>
+            <div class="text-h6">Listado de Asistencia</div>
+            <input type="file" @change="getArch" >
+          </q-card-section>
+
+          <q-card-actions align="right" class="text-primary">
+            <q-btn flat label="Cancel" v-close-popup />
+            <q-btn flat label="Registrar"  />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
     </q-page>
     </template>
 
 <script>
-import { date } from 'quasar'
+import * as XLSX from 'xlsx/xlsx.mjs'
 
 export default {
   name: 'CargosPage',
@@ -62,13 +75,54 @@ export default {
         { name: 'turno', label: 'turno', field: 'turno', align: 'left', sortable: true }
       ],
       filesSearch: '',
-      dialogFile: false
+      dialogFile: false,
+      XLSX: require('xlsx')
     }
   },
   created () {
     this.getFiles()
   },
   methods: {
+    getArch (evt) {
+      const index = 0
+
+      const files = evt.target.files[0] // FileList object
+      const reader = new FileReader()
+      reader.readAsBinaryString(files)
+      reader.onload = function (e) {
+        try {
+          const data = e.target.result
+          const workbook = XLSX.read(data, { type: 'binary' })
+          const wsname = workbook.SheetNames[index] // Tome la primera hoja 0 primera
+          const ws = XLSX.utils.sheet_to_json(workbook.Sheets[wsname]) // Generar contenido de tabla json
+          this.calificacion = []
+          ws.forEach((e, i) => {
+            if (i >= 10 && e.__EMPTY !== undefined && e.__EMPTY.trim() !== '' && e.__EMPTY.trim() !== ' ' && e.__EMPTY != null) {
+              const nombre = e.__EMPTY.replace('  ', ' ')
+              const nota = e.__EMPTY_26
+              this.calificacion.push(e)
+              const indexFind = (this.materia.findIndex(e => e.nombreCompleto === nombre))
+              if (indexFind >= 0) {
+                this.materia[indexFind].promedio = nota
+              }
+            }
+          })
+        //      this.calificacion=ws
+        // console.log(ws)
+        } catch (e) {
+          return false
+        }
+      }
+
+      // Read in the image file as a data URL.
+      // reader.readAsDataURL(files);
+
+      // console.log(reader.ws)
+
+      // var xl2json = XLSX.utils.sheet_to_json(files.Sheets[0])
+      // xl2json.parseExcel(files[0]);
+      // console.log(XLSX.utils.sheet_to_json(reader.Sheets[reader.SheetNames[0]]))
+    },
     addFile () {
       this.dialogFile = true
       this.cargo = { }

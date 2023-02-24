@@ -10,9 +10,12 @@ class Attendance extends Model
     use HasFactory;
     protected $fillable = [
     'fecha',
-    'in',
-    'out',
-    'horas',
+    'horario',
+    'total',
+    'trabajo',
     'employee_id',
 ];
+public function employee(){
+    return $this->belongsTo(\App\Models\Employee::class);
+}
 }

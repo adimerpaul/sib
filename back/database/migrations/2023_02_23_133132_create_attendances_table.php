@@ -16,9 +16,9 @@ return new class extends Migration
         Schema::create('attendances', function (Blueprint $table) {
             $table->id();
             $table->date('fecha');
-            $table->time('in');
-            $table->time('out');
-            $table->integer('horas');
+            $table->string('horario');
+            $table->time('total');
+            $table->string('trabajo');
             $table->unsignedBigInteger('employee_id')->nullable();
             $table->foreign('employee_id')->references('id')->on('employees');
             $table->timestamps();

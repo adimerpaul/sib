@@ -4,14 +4,13 @@
     <div class="row ">
         <div class="col-md-3 q-pa-xs" ><q-btn  class="full-width" color="teal"  label="Cargos" @click="verCargo"/></div>
         <div class="col-md-3 q-pa-xs" ><q-btn  class="full-width" color="accent"  label="Empleados" @click="verEmpleado"/></div>
-        <div class="col-md-3 q-pa-xs" ><q-btn  class="full-width" color="info"  label="Asistencia" /></div>
+        <div class="col-md-3 q-pa-xs" ><q-btn  class="full-width" color="info"  label="Asistencia" @click="dialogExcel=true"/></div>
         <div class="col-md-3 q-pa-xs" ><q-btn  class="full-width" color="green"  label="Generar Planilla" /></div>
     </div>
       <div class="row">
         <div class="col-12">
-          <q-table :loading="loading" :rows-per-page-options="[0]" :rows="cargos" title="Cargos" flat bordered dense :search="asistenciaSearch" :columns="asistenciaColumns">
+          <q-table :loading="loading" :rows-per-page-options="[0]" :rows="asistencias" title="Asistencias" flat bordered dense :search="asistenciaSearch" :columns="asistenciaCol">
             <template v-slot:top-right>
-              <q-btn flat round icon="refresh" @click="getAsistencia" dense />
               <q-input outlined dense v-model="asistenciaSearch" label="Buscar" class="q-ml-md" clearable >
                 <template v-slot:append>
                   <q-icon name="search" />
@@ -22,7 +21,7 @@
                 <div class="row">
                     <div class="col-5"><q-input dense outlined v-model="ini" type="date" label="Fecha Ini" /></div>
                     <div class="col-5"><q-input dense outlined v-model="fin" type="date" label="Fecha Fin" /></div>
-                    <div class="col-2"> <q-btn color="info" icon="manage_search" />
+                    <div class="col-2"> <q-btn color="info" icon="manage_search" @click="getAsistencia"/>
                     </div>
                 </div>
               </template>
@@ -113,11 +112,28 @@
           </q-card-section>
         </q-card>
       </q-dialog>
+      <q-dialog v-model="dialogExcel" >
+        <q-card style="min-width: 350px">
+          <q-card-section>
+            <div class="text-h6">Listado de Asistencia</div>
+            <input type="file" @change="getArch" >
+          </q-card-section>
+          <q-card-section>
+            <q-table :rows="datasist" :columns="asistenciaColumns" row-key="name" />
+          </q-card-section>
+          <q-card-actions align="right" class="text-primary">
+            <q-btn flat label="Cancel" v-close-popup />
+            <q-btn flat label="Registrar"  @click="registrarAsistencia"/>
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
     </q-page>
     </template>
 
 <script>
 import { date } from 'quasar'
+import * as XLSX from 'xlsx/xlsx.mjs'
+import moment from 'moment'
 
 export default {
   name: 'CargosPage',
@@ -129,7 +145,9 @@ export default {
       empleado: {},
       empleados: [],
       asistencias: [],
+      datasist: [],
       planillas: [],
+      // moment: require('moment'),
       ini: date.formatDate(new Date(), 'YYYY-MM-DD'),
       fin: date.formatDate(new Date(), 'YYYY-MM-DD'),
       fileColumns: [
@@ -139,11 +157,10 @@ export default {
         { name: 'turno', label: 'turno', field: 'turno', align: 'left', sortable: true }
       ],
       asistenciaColumns: [
-        { name: 'empleado', label: 'empleado', field: 'empleado', align: 'left', sortable: true },
-        { name: 'fecha', label: 'fecha', field: 'fecha', align: 'left', sortable: true },
-        { name: 'ingreso', label: 'ingreso', field: 'ingreso', align: 'left', sortable: true },
-        { name: 'salida', label: 'salida', field: 'salida', align: 'left', sortable: true },
-        { name: 'horas', label: 'horas', field: 'horas', align: 'left', sortable: true }
+        { name: 'ci', label: 'ci', field: 'ci', align: 'left', sortable: true },
+        { name: 'Nombre', label: 'Nombre', field: 'Nombre', align: 'left', sortable: true },
+        { name: 'Fecha', label: 'Fecha', field: 'Fecha', align: 'left', sortable: true },
+        { name: 'Total', label: 'Total', field: 'Total', align: 'left', sortable: true }
       ],
       empleadoColumns: [
         { name: 'opciones', label: 'Opciones', field: 'opciones', align: 'left', sortable: true, style: 'width: 100px' },
@@ -156,12 +173,20 @@ export default {
         { name: 'fechaing', label: 'fechaing', field: 'fechaing', align: 'left', sortable: true },
         { name: 'cargo', label: 'cargo', field: row => row.charge.cargo, align: 'left', sortable: true }
       ],
+      asistenciaCol: [
+        { name: 'ci', label: 'ci', field: row => row.employee.ci, sortable: true },
+        { name: 'Nombre', label: 'Nombre', field: row => row.employee.nombre + ' ' + row.employee.apellido, sortable: true },
+        { name: 'Fecha', label: 'Fecha', field: 'fecha', sortable: true },
+        { name: 'Horarios', label: 'Horarios', field: 'Horarios', sortable: true },
+        { name: 'Total', label: 'Total', field: 'total', sortable: true }
+      ],
       filesSearch: '',
       cargoSearch: '',
       empleadoSearch: '',
       asistenciaSearch: '',
       dialogFile: false,
       dialogCargo: false,
+      dialogExcel: false,
       dialogEmpleado: false
     }
   },
@@ -170,6 +195,84 @@ export default {
     this.getEmpleados()
   },
   methods: {
+    registrarAsistencia () {
+      if (this.datasist.length === 0) {
+        return false
+      }
+      this.loading = true
+      this.$api.post('attendance', { datos: this.datasist })
+        .then(response => {
+          // console.log(response.data)
+          this.dialogExcel = false
+          this.datasist = []
+          this.getAsistencia()
+        })
+        .catch(error => {
+          console.log(error)
+        }).finally(() => {
+          this.loading = false
+        })
+    },
+    getArch (evt) {
+      const index = 0
+      // const mc = this
+      // eslint-disable-next-line @typescript-eslint/no-this-alias
+      const mc = this
+      this.datasist = []
+      const files = evt.target.files[0] // FileList object
+      const reader = new FileReader()
+      reader.readAsBinaryString(files)
+      reader.onload = function (e) {
+        try {
+          const data = e.target.result
+          const workbook = XLSX.read(data, { type: 'binary' })
+          const wsname = workbook.SheetNames[index] // Tome la primera hoja 0 primera
+          const ws = XLSX.utils.sheet_to_json(workbook.Sheets[wsname]) // Generar contenido de tabla json
+          ws.forEach(r => {
+            r.ci = r['ID de Usuario']
+            r.tarde = r['Llegada Tarde']
+            // r.fecha = moment(date(r.Fecha)).format('YYYY-MM-DD')
+            // thi s.datasist.push(r)
+          })
+          console.log(ws)
+          mc.datasist = ws
+          console.log(mc.datasist)
+          // this.calificacion = []
+          /* ws.forEach((e, i) => {
+            if (i >= 10 && e.__EMPTY !== undefined && e.__EMPTY.trim() !== '' && e.__EMPTY.trim() !== ' ' && e.__EMPTY != null) {
+              const nombre = e.__EMPTY.replace('  ', ' ')
+              const nota = e.__EMPTY_26
+              this.calificacion.push(e)
+              const indexFind = (this.materia.findIndex(e => e.nombreCompleto === nombre))
+              if (indexFind >= 0) {
+                this.materia[indexFind].promedio = nota
+              }
+            }
+          })
+        //      this.calificacion=ws
+        // console.log(ws)
+      */
+        } catch (e) {
+          this.datasist = []
+          return false
+        }
+      }
+      // Read in the image file as a data URL.
+      // reader.readAsDataURL(files);
+
+      // console.log(reader.ws)
+
+      // var xl2json = XLSX.utils.sheet_to_json(files.Sheets[0])
+      // xl2json.parseExcel(files[0]);
+      // console.log(XLSX.utils.sheet_to_json(reader.Sheets[reader.SheetNames[0]]))
+    },
+    getAsistencia () {
+      this.$api.post('asistencia', { ini: this.ini, fin: this.fin })
+        .then(response => {
+          console.log(response.data)
+          this.asistencias = response.data
+        })
+    },
     verCargo () {
       this.dialogCargo = true
       this.cargo = { }
@@ -184,7 +287,7 @@ export default {
       this.loading = true
       this.$api.post('charges', this.cargo)
         .then(response => {
-          console.log(response)
+          console.log(response.data)
           this.dialogFile = false
           this.getFiles()
         })

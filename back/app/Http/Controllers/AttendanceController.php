@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Attendance;
+use App\Models\Employee;
 use App\Http\Requests\StoreAttendanceRequest;
 use App\Http\Requests\UpdateAttendanceRequest;
+use Illuminate\Http\Request;
 
 class AttendanceController extends Controller
 {
@@ -19,7 +21,7 @@ class AttendanceController extends Controller
     }
 
     public function asistencia(Request $request){
-        return Attendance::whereDate('fecha','>=',$request->ini)->whereDate('fecha','<=',$request->fin)->get();
+        return Attendance::with('employee')->whereDate('fecha','>=',$request->ini)->whereDate('fecha','<=',$request->fin)->get();
     }
 
     /**
@@ -41,6 +43,23 @@ class AttendanceController extends Controller
     public function store(StoreAttendanceRequest $request)
     {
         //
+        //return $request;
+        foreach ($request->datos as $value) {
+            # code...
+            //return $value;
+            $employee = Employee::where('ci', $value['ci'])->first();
+   //         return $employee;
+            if(Attendance::where('employee_id', $employee->id)->whereDate('fecha', $value['Fecha'])->count()==0)
+            {
+                $attendance=new Attendance();
+                $attendance->fecha=$value['Fecha'];
+                $attendance->horario='';
+                $attendance->total=$value['Total'];
+                $attendance->trabajo='';
+                $attendance->employee_id=$employee->id;
+                $attendance->save();
+            }
+        }
     }
 
     /**
