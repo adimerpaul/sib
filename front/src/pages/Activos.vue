@@ -41,13 +41,12 @@
         </q-card>
       </div>
       <div class="col-12">
-        <q-table :loading="loading" :rows-per-page-options="[0]" :rows="sales" flat bordered dense :search="salesSearch" :columns="saleColumns">
+        <q-table :loading="loading" :rows-per-page-options="[0]" :rows="inventaries" flat bordered dense :search="inventarySearch" :columns="inventaryColumns">
           <template v-slot:top-right>
             <q-btn color="green" label="Crear Ingreso" no-caps icon="add_circle_outline" @click="addIngreso" dense />
-<!--            <q-btn color="red" label="Crear Egreso" no-caps icon="add_circle_outline" @click="addEgreso" dense />-->
             <q-btn flat round icon="refresh" @click="getSales" dense />
             <q-btn flat round icon="o_download" @click="exportSales" dense />
-            <q-input outlined dense v-model="salesSearch" label="Buscar" class="q-ml-md" clearable>
+            <q-input outlined dense v-model="inventarySearch" label="Buscar" class="q-ml-md" clearable>
               <template v-slot:append>
                 <q-icon name="search" />
               </template>
@@ -55,7 +54,6 @@
           </template>
           <template v-slot:body-cell-actions="props">
             <q-td :props="props" auto-width>
-              <!--            <q-btn flat round icon="o_print" dense color="primary" title="Imprimir"/>-->
               <q-btn flat size="11px" class="q-pa-none q-ma-none" round @click="anularSale(props.row)" icon="highlight_off" dense color="red" title="Anular" v-if="props.row.status==='Cancelado'"/>
             </q-td>
           </template>
@@ -73,21 +71,19 @@
         </q-table>
       </div>
     </div>
-    <q-dialog v-model="saleDialog">
+    <q-dialog v-model="inventarieDialog">
       <q-card style="width: 400px;min-max: 80vh;">
         <q-card-section class="row items-center q-pb-none">
-          <q-btn flat dense :icon="`${sale.type==='Ingreso'?'o_attach_money':'o_money_off'}`" :color="`${sale.type==='Ingreso'?'green':'red'}`" :class="`bg-${sale.type==='Ingreso'?'green':'red'}-3`" :style="`border: 1px solid ${sale.type==='Ingreso'?'#4caf50':'#f44336'}`" />
-          <div class="text-h6">{{sale.type==='Ingreso'?'Crear Ingreso':'Crear Egreso'}}</div>
+          <q-btn flat dense :icon="`${inventarie.type==='Ingreso'?'o_attach_money':'o_money_off'}`" :color="`${inventarie.type==='Ingreso'?'green':'red'}`" :class="`bg-${inventarie.type==='Ingreso'?'green':'red'}-3`" :style="`border: 1px solid ${inventarie.type==='Ingreso'?'#4caf50':'#f44336'}`" />
+          <div class="text-h6">{{inventarie.type==='Ingreso'?'Crear Ingreso':'Crear Egreso'}}</div>
           <q-space />
           <q-btn flat icon="close" v-close-popup />
         </q-card-section>
         <q-card-section class="q-pt-none">
           <q-form @submit="onSubmit">
-            <q-input outlined dense v-model="sale.name" label="Nombre" hint="" :rules="[val => val.length > 0 || 'El nombre es requerido']" />
-            <q-input outlined dense v-model="sale.amount" label="Monto (Bs)" mask="#" reverse-fill-mask  :rules="[val => val.length > 0 || 'El monto es requerido']" />
-            <!--          <q-input outlined dense v-model="sale.date" type="date" label="Fecha" />-->
-            <!--          <q-input outlined dense v-model="sale.status" label="Estado" />-->
-            <q-input outlined dense v-model="sale.description" label="Descripción" />
+            <q-input outlined dense v-model="inventarie.name" label="Nombre" hint="" :rules="[val => val.length > 0 || 'El nombre es requerido']" />
+            <q-input outlined dense v-model="inventarie.amount" label="Monto (Bs)" mask="#" reverse-fill-mask  :rules="[val => val.length > 0 || 'El monto es requerido']" />
+            <q-input outlined dense v-model="inventarie.description" label="Descripción" />
             <div class="row">
               <div class="col-6 flex flex-center">
                 <q-btn :loading="loading" color="primary" label="Guardar" type="submit" no-caps icon="o_save" dense />
@@ -114,20 +110,18 @@ export default {
   data () {
     return {
       d: new Printd(),
-      saleDialog: false,
+      inventarieDialog: false,
       loading: false,
-      sales: [],
-      sale: {
+      inventaries: [],
+      inventarie: {
         name: '',
         amount: 0,
         status: '',
         type: '',
         description: ''
       },
-      salesSearch: '',
-      dateIni: date.formatDate(new Date(), 'YYYY-MM-DD'),
-      dateEnd: date.formatDate(new Date(), 'YYYY-MM-DD'),
-      saleColumns: [
+      inventarySearch: '',
+      inventaryColumns: [
         { name: 'actions', label: 'Acciones', field: 'actions', align: 'left', sortable: false },
         { name: 'amount', label: 'Monto', field: 'amount', align: 'left', sortable: true },
         { name: 'name', label: 'Nombre', field: 'name', align: 'left', sortable: true },
@@ -155,7 +149,7 @@ export default {
             { label: 'Hora', value: 'time' },
             { label: 'Usuario', value: (row) => row.user.name }
           ],
-          content: this.sales
+          content: this.inventaries
         }
       ]
 
@@ -169,7 +163,7 @@ export default {
 
       xlsx(data, settings) // Will download the excel file
     },
-    anularSale (sale) {
+    anularSale (inventarie) {
       this.$q.dialog({
         title: 'Anular',
         message: '¿Está seguro de anular esta venta?',
@@ -177,7 +171,7 @@ export default {
         persistent: true
       }).onOk(() => {
         this.loading = true
-        this.$api.post('anularSale', sale).then((response) => {
+        this.$api.post('anularSale', inventarie).then((response) => {
           console.log(response)
           this.getSales()
         }).catch((error) => {
@@ -193,9 +187,9 @@ export default {
     },
     onSubmit () {
       this.loading = true
-      this.$api.post('sales', this.sale).then((response) => {
+      this.$api.post('inventaries', this.inventarie).then((response) => {
         console.log(response)
-        this.saleDialog = false
+        this.inventarieDialog = false
         this.getSales()
 
         const recibo = new Recibo()
@@ -215,7 +209,7 @@ export default {
         dateIni: this.dateIni,
         dateEnd: this.dateEnd
       }).then((response) => {
-        this.sales = response.data
+        this.inventaries = response.data
       }).catch((error) => {
         console.log(error)
       }).finally(() => {
@@ -223,8 +217,8 @@ export default {
       })
     },
     addIngreso () {
-      this.saleDialog = true
-      this.sale = {
+      this.inventarieDialog = true
+      this.inventarie = {
         name: 'INGRESO POR VENTA',
         amount: '',
         status: 'Cancelado',
@@ -233,8 +227,8 @@ export default {
       }
     },
     addEgreso () {
-      this.saleDialog = true
-      this.sale = {
+      this.inventarieDialog = true
+      this.inventarie = {
         name: 'EGRESO POR COMPRA',
         amount: '',
         date: date.formatDate(new Date(), 'YYYY-MM-DD'),
@@ -248,18 +242,18 @@ export default {
   computed: {
     ingresoSum () {
       let sum = 0
-      this.sales.forEach(sale => {
-        if (sale.type === 'Ingreso' && sale.status === 'Cancelado') {
-          sum += parseFloat(sale.amount)
+      this.inventaries.forEach(inventarie => {
+        if (inventarie.type === 'Ingreso' && inventarie.status === 'Cancelado') {
+          sum += parseFloat(inventarie.amount)
         }
       })
       return Math.round(sum * 100) / 100
     },
     egresoSum () {
       let sum = 0
-      this.sales.forEach(sale => {
-        if (sale.type === 'Egreso' && sale.status === 'Cancelado') {
-          sum += parseFloat(sale.amount)
+      this.inventaries.forEach(inventarie => {
+        if (inventarie.type === 'Egreso' && inventarie.status === 'Cancelado') {
+          sum += parseFloat(inventarie.amount)
         }
       })
       return Math.round(sum * 100) / 100
