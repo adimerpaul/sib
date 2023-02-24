@@ -11,13 +11,70 @@
         <q-card-section class="q-pt-none">
           <q-form @submit="userSave">
             <div class="row">
-              <div class="col-12 col-md-6">
+              <div class="col-12 col-md-7">
                 <div class="row">
-                  <div class="col-6">
-                    <q-input outlined dense v-model="user.name" label="Nombre" :rules="[val => val && Object.keys(val).length > 0 || 'Nombre requerido']" />
+                  <div class="col-6 col-md-3">
+                    <q-input outlined dense v-model="user.paterno" label="Apellido Paterno" :rules="[val => val && Object.keys(val).length > 0 || 'Apellido Paterno requerido']" />
                   </div>
-                  <div class="col-6">
+                  <div class="col-6 col-md-3">
+                    <q-input outlined dense v-model="user.materno" label="Apellido Materno" />
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <q-input outlined dense v-model="user.nombres" label="Nombres" :rules="[val => val && Object.keys(val).length > 0 || 'Nombres requerido']" />
+                  </div>
+                  <div class="col-6 col-md-3">
                     <q-input outlined dense v-model="user.email" label="Email" :rules="[val => val && Object.keys(val).length > 0 || 'Email requerido']" />
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <q-input outlined dense type="date" v-model="user.fechaNac" label="Fecha Nacimiento" :rules="[val => val && Object.keys(val).length > 0 || 'Fecha Nacimiento requerido']" />
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <q-select outlined dense v-model="user.departamento" :options="departamentos" label="Departamento" />
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <q-input outlined dense v-model="user.nacimiento" label="Lugar Nacimiento" />
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <q-select outlined dense v-model="user.sexo" :options="['M','F']" label="Sexo" />
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <q-input outlined dense v-model="user.zona" label="Zona" hint=""/>
+                  </div>
+                  <div class="col-6 col-md-6">
+                    <q-input outlined dense v-model="user.direccion" label="Dirección" hint=""/>
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <q-input outlined dense v-model="user.telefono" label="Telefono" hint=""/>
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <q-input outlined dense v-model="user.oficina" label="Oficina" hint=""/>
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <q-input outlined dense v-model="user.celular" label="Celular" hint=""/>
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <q-input outlined dense v-model="user.especialidad" label="Especialidad" hint=""/>
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <q-input outlined dense v-model="user.fechaDiploma" label="Fecha Diploma" hint=""/>
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <q-input outlined dense v-model="user.universidad" label="Universidad" hint=""/>
+                  </div>
+                  <div class="col-12">
+                    <div class="col-12 flex flex-center" v-if="userCreate=='create'">
+                      <q-uploader
+                        accept=".jpg, .png"
+                        multiple
+                        auto-upload
+                        label="Arrastra una imagen o haz click para seleccionar"
+                        @uploading="uploadingFn"
+                        ref="uploader"
+                        max-files="1"
+                        auto-expand
+                        :url="`${$url}upload/${userCreate=='create' ? '1' : '1'}/${userCreate ? 'shopUser' : 'shop'}`"
+                        stack-label="upload image"/>
+                    </div>
                   </div>
                   <div class="col-6" v-if="userCreate=='create'">
                     <q-input :type="showPassword ? 'text' : 'password'" outlined dense v-model="user.password" label="Password" :rules="[val => val && Object.keys(val).length > 0 || 'Password requerido']" >
@@ -33,107 +90,9 @@
                       </template>
                     </q-input>
                   </div>
-                  <div class="col-12 flex flex-center" v-if="userCreate=='create'">
-                    <q-uploader
-                      accept=".jpg, .png"
-                      multiple
-                      auto-upload
-                      label="Arrastra una imagen o haz click para seleccionar"
-                      @uploading="uploadingFn"
-                      ref="uploader"
-                      max-files="1"
-                      auto-expand
-                      :url="`${$url}upload/${userCreate=='create' ? '1' : '1'}/${userCreate ? 'shopNew' : 'shop'}`"
-                      stack-label="upload image"/>
-                  </div>
-                  <div class="col-2">
-                    <q-input outlined dense v-model="user.rni" label="rni" hint="" />
-                  </div>
-                  <div class="col-2">
-                    <q-input outlined dense v-model="user.libro" label="libro" hint="" />
-                  </div>
-                  <div class="col-2">
-                    <q-input outlined dense v-model="user.categoria" label="categoria" hint="" />
-                  </div>
-                  <div class="col-2">
-                    <q-input outlined dense v-model="user.renovacion" label="renovacion" hint="" />
-                  </div>
-                  <div class="col-2">
-                    <q-input outlined dense v-model="user.tipoCodumento" label="tipoCodumento" hint="" />
-                  </div>
-                  <div class="col-2">
-                    <q-input outlined dense v-model="user.emitido" label="emitido" hint="" />
-                  </div>
-                  <div class="col-2">
-                    <q-input outlined dense v-model="user.genero" label="genero" hint="" />
-                  </div>
-                  <div class="col-2">
-                    <q-input outlined dense type="date" v-model="user.fechaNac" label="fechaNac" hint="" />
-                  </div>
-                  <div class="col-2">
-                    <q-input outlined dense v-model="user.paginas" label="paginas" hint="" />
-                  </div>
-                  <div class="col-2">
-                    <q-input outlined dense v-model="user.nivel" label="nivel" hint="" />
-                  </div>
-                  <div class="col-2">
-                    <q-input outlined dense type="date" v-model="user.fechaInscripcion" label="fechaInscripcion" hint="" />
-                  </div>
-                  <div class="col-2">
-                    <q-input outlined dense type="date" v-model="user.fechaValido" label="fechaValido" hint="" />
-                  </div>
-                  <div class="col-2">
-                    <q-input outlined dense v-model="user.ci" label="ci" hint="" />
-                  </div>
-                  <div class="col-2">
-                    <q-input outlined dense v-model="user.ciAnverso" label="ciAnverso" hint="" />
-                  </div>
-                  <div class="col-2">
-                    <q-input outlined dense v-model="user.ciReverso" label="ciReverso" hint="" />
-                  </div>
-                  <div class="col-2">
-                    <q-input outlined dense v-model="user.ciudad" label="ciudad" hint="" />
-                  </div>
-                  <div class="col-2">
-                    <q-input outlined dense v-model="user.departamento" label="departamento" hint="" />
-                  </div>
-                  <div class="col-2">
-                    <q-input outlined dense v-model="user.municipio" label="municipio" hint="" />
-                  </div>
-                  <div class="col-2">
-                    <q-input outlined dense v-model="user.barrio" label="barrio" hint="" />
-                  </div>
-                  <div class="col-2">
-                    <q-input outlined dense v-model="user.direccion" label="direccion" hint="" />
-                  </div>
-                  <div class="col-2">
-                    <q-input outlined dense v-model="user.telefono" label="telefono" hint="" />
-                  </div>
-                  <div class="col-2">
-                    <q-input outlined dense v-model="user.celular" label="celular" hint="" />
-                  </div>
-                  <div class="col-2">
-                    <q-input outlined dense v-model="user.web" label="web" hint="" />
-                  </div>
-                  <div class="col-2">
-                    <q-input outlined dense v-model="user.skype" label="skype" hint="" />
-                  </div>
-                  <div class="col-2">
-                    <q-input outlined dense v-model="user.facebook" label="facebook" hint="" />
-                  </div>
-                  <div class="col-2" hidden>
-                    <div class="text-subtitle2 text-grey">Roles</div>
-                    <q-option-group
-                      dense
-                      v-model="user.roles"
-                      :options="roles"
-                      color="green"
-                      type="checkbox"
-                    />
-                  </div>
                 </div>
               </div>
-              <div class="col-12 col-md-6">
+              <div class="col-12 col-md-5">
                 <div class="text-grey text-bold text-subtitle2"> Mover el marker para seleccionar la ubicación </div>
                 <div style="height:500px" class="items-center">
                   <l-map ref="map" @click="clickMaps" :zoom="13" :maxZoom="17" :center="[-17.970, -67.1111 ]" >
@@ -177,6 +136,17 @@ export default defineComponent({
   },
   data () {
     return {
+      departamentos: [
+        'La Paz',
+        'Cochabamba',
+        'Santa Cruz',
+        'Oruro',
+        'Potosí',
+        'Tarija',
+        'Chuquisaca',
+        'Pando',
+        'Beni'
+      ],
       styleMap: true,
       users: [],
       colegiadoSearch: '',
@@ -205,7 +175,7 @@ export default defineComponent({
       ]
     }
   },
-  created () {
+  mounted () {
     // this.getUsers()
     this.userCreate = 'edit'
     this.$api.get('users/' + this.$store.user.id).then((res) => {
@@ -213,19 +183,19 @@ export default defineComponent({
         res.data.lat = -17.970
         res.data.lng = -67.1111
       }
-      const roles = res.data.roles.map((role) => role.id)
-      res.data.roles = []
-      roles.forEach((role) => {
-        res.data.roles.push(role)
-      })
+      // const roles = res.data.roles.map((role) => role.id)
+      // res.data.roles = []
+      // roles.forEach((role) => {
+      //   res.data.roles.push(role)
+      // })
       this.userEdit(res.data)
     })
-    this.$api.get('roles').then((res) => {
-      this.roles = []
-      res.data.forEach((item) => {
-        this.roles.push({ label: item.name, value: item.id })
-      })
-    })
+    // this.$api.get('roles').then((res) => {
+    //   this.roles = []
+    //   res.data.forEach((item) => {
+    //     this.roles.push({ label: item.name, value: item.id })
+    //   })
+    // })
   },
   methods: {
     showPhoto (photo) {
@@ -301,6 +271,7 @@ export default defineComponent({
       })
     },
     userEdit (user) {
+      console.log(user)
       this.userCreate = 'edit'
       this.userDialog = true
       this.user = user

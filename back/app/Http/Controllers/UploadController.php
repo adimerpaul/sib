@@ -22,9 +22,6 @@ class UploadController extends Controller
                     }
                 )
                 ->save($ruta,72);
-            $shop=Shop::find($id);
-            $shop->avatar=$name;
-            $shop->save();
             return $name;
         }
         if ($type=='fileCreate'){

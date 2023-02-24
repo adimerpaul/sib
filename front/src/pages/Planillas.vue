@@ -133,7 +133,7 @@
 <script>
 import { date } from 'quasar'
 import * as XLSX from 'xlsx/xlsx.mjs'
-import moment from 'moment'
+// import moment from 'moment'
 
 export default {
   name: 'CargosPage',
@@ -202,7 +202,7 @@ export default {
       this.loading = true
       this.$api.post('attendance', { datos: this.datasist })
         .then(response => {
-          // console.log(response.data)
+          console.log(response.data)
           this.dialogExcel = false
           this.datasist = []
           this.getAsistencia()
@@ -303,9 +303,9 @@ export default {
       this.empleado.charge_id = this.cargo.id
       this.$api.post('employees', this.empleado)
         .then(response => {
-          console.log(response)
-          this.dialogEmpleado = false
-          this.getFiles()
+          // console.log(response)
+          // this.dialogEmpleado = false
+          this.getEmpleados()
         })
         .catch(error => {
           console.log(error)
