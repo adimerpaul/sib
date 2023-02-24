@@ -2,17 +2,17 @@
     <q-page>
     <div class="text-h5 flex flex-center">RRHH Y GENERACION DE PLANILLAS</div>
     <div class="row ">
-        <div class="col-3 "><q-btn color="teal"  label="Cargos" @click="verCargo"/></div>
-        <div class="col-3 "><q-btn color="accent"  label="Empleados" @click="verEmpleado"/></div>
-        <div class="col-3 "><q-btn color="info"  label="Asistencia" /></div>
-        <div class="col-3 "><q-btn color="green"  label="Generar Planilla" /></div>
+        <div class="col-md-3 q-pa-xs" ><q-btn  class="full-width" color="teal"  label="Cargos" @click="verCargo"/></div>
+        <div class="col-md-3 q-pa-xs" ><q-btn  class="full-width" color="accent"  label="Empleados" @click="verEmpleado"/></div>
+        <div class="col-md-3 q-pa-xs" ><q-btn  class="full-width" color="info"  label="Asistencia" /></div>
+        <div class="col-md-3 q-pa-xs" ><q-btn  class="full-width" color="green"  label="Generar Planilla" /></div>
     </div>
       <div class="row">
         <div class="col-12">
-          <q-table :loading="loading" :rows-per-page-options="[0]" :rows="cargos" title="Cargos" flat bordered dense :search="filesSearch" :columns="fileColumns">
+          <q-table :loading="loading" :rows-per-page-options="[0]" :rows="cargos" title="Cargos" flat bordered dense :search="asistenciaSearch" :columns="asistenciaColumns">
             <template v-slot:top-right>
-              <q-btn flat round icon="refresh" @click="getFiles" dense />
-              <q-input outlined dense v-model="filesSearch" label="Buscar" class="q-ml-md" clearable>
+              <q-btn flat round icon="refresh" @click="getAsistencia" dense />
+              <q-input outlined dense v-model="asistenciaSearch" label="Buscar" class="q-ml-md" clearable >
                 <template v-slot:append>
                   <q-icon name="search" />
                 </template>
@@ -20,8 +20,8 @@
             </template>
             <template v-slot:top-left>
                 <div class="row">
-                    <div class="col-5"><q-input dense outlined v-model="ini" label="Fecha Ini" /></div>
-                    <div class="col-5"><q-input  dense outlined v-model="fin" label="Fecha Fin" /></div>
+                    <div class="col-5"><q-input dense outlined v-model="ini" type="date" label="Fecha Ini" /></div>
+                    <div class="col-5"><q-input dense outlined v-model="fin" type="date" label="Fecha Fin" /></div>
                     <div class="col-2"> <q-btn color="info" icon="manage_search" />
                     </div>
                 </div>
@@ -84,7 +84,7 @@
                     <div class="col-3"><q-input dense outlined v-model="empleado.nombre" label="Nombres" :rules="[val => val.length > 0 || 'El nombre es requerido']" /></div>
                     <div class="col-3"><q-input dense outlined v-model="empleado.apellido" label="Apellidos" :rules="[val => val.length > 0 || 'El apellido es requerido']" /></div>
                     <div class="col-3"> <q-radio dense v-model="empleado.sexo" val="Masculino" label="Masculino" />
-                        <q-radio dense v-model="empleado.sexo" val="Femenino" label="Femenino" /></div>
+                    <q-radio dense v-model="empleado.sexo" val="Femenino" label="Femenino" /></div>
                     <div class="col-3"><q-input dense outlined v-model="empleado.fechanac" type="date" label="Fecha Nac" :rules="[val => val.length > 0 || 'El valor requerida']" /></div>
                     <div class="col-3"><q-input dense outlined v-model="empleado.fechaing" type="date" label="Fecha Ing" :rules="[val => val.length > 0 || 'El valor requerida']" /></div>
                     <div class="col-3"><q-select dense outlined v-model="cargo"  label="Cargo" :options="cargos" /></div>
@@ -128,11 +128,22 @@ export default {
       cargo: {},
       empleado: {},
       empleados: [],
+      asistencias: [],
+      planillas: [],
+      ini: date.formatDate(new Date(), 'YYYY-MM-DD'),
+      fin: date.formatDate(new Date(), 'YYYY-MM-DD'),
       fileColumns: [
         { name: 'opciones', label: 'Opciones', field: 'opciones', align: 'left', sortable: true, style: 'width: 100px' },
         { name: 'cargo', label: 'cargo', field: 'cargo', align: 'left', sortable: true },
         { name: 'salario', label: 'salario', field: 'salario', align: 'left', sortable: true },
         { name: 'turno', label: 'turno', field: 'turno', align: 'left', sortable: true }
+      ],
+      asistenciaColumns: [
+        { name: 'empleado', label: 'empleado', field: 'empleado', align: 'left', sortable: true },
+        { name: 'fecha', label: 'fecha', field: 'fecha', align: 'left', sortable: true },
+        { name: 'ingreso', label: 'ingreso', field: 'ingreso', align: 'left', sortable: true },
+        { name: 'salida', label: 'salida', field: 'salida', align: 'left', sortable: true },
+        { name: 'horas', label: 'horas', field: 'horas', align: 'left', sortable: true }
       ],
       empleadoColumns: [
         { name: 'opciones', label: 'Opciones', field: 'opciones', align: 'left', sortable: true, style: 'width: 100px' },
@@ -148,6 +159,7 @@ export default {
       filesSearch: '',
       cargoSearch: '',
       empleadoSearch: '',
+      asistenciaSearch: '',
       dialogFile: false,
       dialogCargo: false,
       dialogEmpleado: false

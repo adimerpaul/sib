@@ -18,6 +18,10 @@ class AttendanceController extends Controller
         //
     }
 
+    public function asistencia(Request $request){
+        return Attendance::whereDate('fecha','>=',$request->ini)->whereDate('fecha','<=',$request->fin)->get();
+    }
+
     /**
      * Show the form for creating a new resource.
      *
