@@ -158,11 +158,11 @@ export default defineComponent({
           visible: 'socio'
         },
         {
-          title: 'Cargos',
-          caption: 'Cargos',
+          title: 'Modulo RRHH y Planillas',
+          caption: 'Empleados',
           icon: 'manage_accounts',
-          link: '/cargos',
-          visible: 'socio'
+          link: '/planillas',
+          visible: 'administrador'
         }
       ],
       leftDrawerOpen: false

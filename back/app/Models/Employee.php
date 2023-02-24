@@ -19,7 +19,7 @@ class Employee extends Model
     'charge_id'
     ];
 
-    public function cargo(){
+    public function charge(){
         return $this->belongsTo(\App\Models\Charge::class);
     }
 }

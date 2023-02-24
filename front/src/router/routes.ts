@@ -10,6 +10,7 @@ import Seguimientos from 'pages/Seguimientos.vue'
 import Ingresos from 'pages/Ingresos.vue'
 import Activos from 'pages/Activos.vue'
 import Cargos from 'pages/Cargos.vue'
+import Planillas from 'pages/Planillas.vue'
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
@@ -23,7 +24,8 @@ const routes: RouteRecordRaw[] = [
       { path: 'seguimientos', component: Seguimientos, meta: { requiresAuth: true } },
       { path: 'ingresos', component: Ingresos, meta: { requiresAuth: true } },
       { path: 'activos', component: Activos, meta: { requiresAuth: true } },
-      { path: 'cargos', component: Cargos, meta: { requiresAuth: true } }
+      { path: 'cargos', component: Cargos, meta: { requiresAuth: true } },
+      { path: 'planillas', component: Planillas, meta: { requiresAuth: true } }
     ]
   },
   {
