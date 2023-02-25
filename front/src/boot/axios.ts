@@ -37,10 +37,11 @@ export default boot(({ app, router }) => {
   app.config.globalProperties.$api = api
 
   app.config.globalProperties.$api.get('cogs').then((res) => {
-    app.config.globalProperties.$store.nombre = res.data[0].value
-    app.config.globalProperties.$store.direccion = res.data[1].value
-    app.config.globalProperties.$store.telefono = res.data[2].value
-    app.config.globalProperties.$store.email = res.data[3].value
+    // app.config.globalProperties.$store.nombre = res.data[0].value
+    // app.config.globalProperties.$store.direccion = res.data[1].value
+    // app.config.globalProperties.$store.telefono = res.data[2].value
+    // app.config.globalProperties.$store.email = res.data[3].value
+    app.config.globalProperties.$store.cogs = res.data
   })
   const token = localStorage.getItem('tSib')
   if (token) {

@@ -119,6 +119,7 @@
                   auto-upload
                   label="Arrastra una imagen o haz click para seleccionar"
                   @uploading="uploadingFn"
+                  @failed="errorFn"
                   ref="uploader"
                   max-files="1"
                   auto-expand
@@ -404,6 +405,16 @@ export default defineComponent({
           }
         }
       }
+    },
+    errorFn () {
+      // console.log(err)
+      this.$q.notify({
+        color: 'red-4',
+        textColor: 'white',
+        icon: 'cloud_done',
+        position: 'top',
+        message: 'Error al subir la imagen, intente nuevamente el nombre no debe contener espacios o ñ'
+      })
     }
   }
 })

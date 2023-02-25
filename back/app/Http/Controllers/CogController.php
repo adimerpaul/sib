@@ -15,7 +15,12 @@ class CogController extends Controller
      */
     public function index()
     {
-        return Cog::all();
+        $cogs = Cog::all();
+        $cog['nombre']=$cogs[0]->value;
+        $cog['direccion']=$cogs[1]->value;
+        $cog['telefono']=$cogs[2]->value;
+        $cog['email']=$cogs[3]->value;
+        return $cog;
     }
 
     /**

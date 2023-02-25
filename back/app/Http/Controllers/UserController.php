@@ -50,9 +50,7 @@ class UserController extends Controller
         }
     }
     public function store(Request $request){
-        if ($request->name == '' || isset($request->name) || $request->name == null) {
-//            $request->name= $request->paterno.' '.$request->materno.' '.$request->nombres;
-//            error_log($request->name);
+        if ($request->name == '' || $request->name == null) {
             $request->merge(['name' => $request->paterno.' '.$request->materno.' '.$request->nombres]);
         }
         error_log(json_encode($request->all()));

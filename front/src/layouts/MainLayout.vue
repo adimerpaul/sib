@@ -15,7 +15,7 @@
           <q-img
             src="logo.png" width="50px"
           />
-          {{ $store.nombre }}
+          {{ $store.cogs.nombre }}
         </q-toolbar-title>
 
         <div>

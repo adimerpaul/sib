@@ -91,10 +91,11 @@
                 auto-upload
                 label="Arrastra una imagen o haz click para seleccionar"
                 @uploading="uploadingFn"
+                @failed="errorFn"
                 ref="uploader"
                 max-files="1"
                 auto-expand
-                :url="`${$url}upload/${userCreate=='create' ? '1' : '1'}/${userCreate ? 'shopNew' : 'shop'}`"
+                :url="`${$url}upload/${userCreate=='create' ? '1' : '1'}/${userCreate ? 'shopUser' : 'shop'}`"
                 stack-label="upload image"/>
             </div>
             <div class="col-2">
@@ -167,6 +168,16 @@ export default defineComponent({
     })
   },
   methods: {
+    errorFn () {
+      // console.log(err)
+      this.$q.notify({
+        color: 'red-4',
+        textColor: 'white',
+        icon: 'cloud_done',
+        position: 'top',
+        message: 'Error al subir la imagen, intente nuevamente el nombre no debe contener espacios o ñ'
+      })
+    },
     showPhoto (photo) {
       this.$q.dialog({
         html: true,
