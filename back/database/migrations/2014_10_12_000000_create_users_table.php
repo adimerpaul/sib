@@ -18,11 +18,12 @@ return new class extends Migration
             $table->string('name');
             $table->string('rni')->nullable();
             $table->string('ci')->nullable();
+            $table->string('expedido')->nullable();
             $table->string('paterno')->nullable();
             $table->string('materno')->nullable();
             $table->string('nombres')->nullable();
             $table->date('fechaNac')->nullable();
-            $table->date        ('fechaRegistro')->nullable();
+            $table->date('fechaRegistro')->nullable();
             $table->string('departamento')->nullable();
             $table->string('nacimiento')->nullable();
             $table->string('sexo')->nullable();

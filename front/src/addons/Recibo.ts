@@ -18,6 +18,10 @@ export class Recibo {
     })
   }
 
+  kardex(user){
+    return `<html></html>`
+  }
+
   noteFormat (sale, qr) {
     numbers().Config._setSingular('BOLIVIANO')
     numbers().Config._setPlural('BOLIVIANOS')
