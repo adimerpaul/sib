@@ -37,7 +37,7 @@ return new class extends Migration
             $table->string('avatar')->nullable()->default('avatar.png');
             $table->string('lat')->nullable();
             $table->string('lng')->nullable();
-            $table->string('email')->unique();
+            $table->string('email')->unique()->nullable();
             $table->string('type')->default('usuario');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
