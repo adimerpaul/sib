@@ -41,12 +41,18 @@ class UserController extends Controller
     public function index(){
         return User::with('roles')->where('id','!=',1)->get();
     }
-    public function show($type){
+    public function show($type,Request $request){
         $user = User::where('id', $type)->with('roles')->first();
         if ($user) {
             return $user;
-        } else {
+        }
+        else if ($type == 'usuario') {
             return User::with('roles')->where('id','!=',1)->where('type',$type)->get();
+        }else {
+            if (isset($request->filter)){
+                return User::with('roles')->where('id','!=',1)->where('type',$type)->where('name','like','%'.$request->filter.'%')->paginate(20);
+            }
+            return User::with('roles')->where('id','!=',1)->where('type',$type)->paginate(20);
         }
     }
     public function store(Request $request){

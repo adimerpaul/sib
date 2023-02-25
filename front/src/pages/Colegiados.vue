@@ -1,8 +1,19 @@
 <template>
 <q-page>
   <div class="row">
+<!--    <div class="col-12">-->
+<!--      <q-table-->
+<!--        v-model:pagination="pagination"-->
+<!--        :rows-per-page-options="[]"-->
+<!--        color="secondary"-->
+<!--        :loading="loading"-->
+<!--        :rows="users"-->
+<!--        :columns="columns"-->
+<!--        @request="onRequest"-->
+<!--      />-->
+<!--    </div>-->
     <div class="col-12">
-      <q-table :loading="loading" title="Colegiados" dense bordered flat :filter="colegiadoSearch" :rows="users" :columns="userColumns" :rows-per-page-options="[0]">
+      <q-table v-model:pagination="pagination" @request="onRequest" :rows-per-page-options="[]" :loading="loading" title="Colegiados" dense bordered flat :filter="colegiadoSearch" :rows="users" :columns="userColumns">
         <template v-slot:top-right>
           <q-btn @click="userAdd" color="primary" icon="add_circle_outline" dense label="Agregar" no-caps />
           <q-input dense outlined v-model="colegiadoSearch" label="Buscar" clearable>
@@ -205,6 +216,26 @@ export default defineComponent({
   },
   data () {
     return {
+      dogs: [],
+      columns: [
+        { name: 'name', label: 'Name', field: 'name', align: 'left', sortable: true },
+        { name: 'age', label: 'Age', field: 'age', align: 'center' },
+        { name: 'email', label: 'Email', field: 'email' }
+      ],
+      pagination: {
+        // No longer using sort. if needed, this can now be done using the backend!
+        // sortBy: 'name',
+        // descending: false,
+        page: 1,
+        rowsPerPage: 15,
+        // When using server side pagination, QTable needs
+        // to know the "rows number" (total number of rows).
+        // Why?
+        // Because Quasar has no way of knowing what the last page
+        // will be without this information!
+        // Therefore, we now need to supply it with a "rowsNumber" ourself.
+        rowsNumber: 0
+      },
       departamentos: [
         'La Paz',
         'Cochabamba',
@@ -246,7 +277,8 @@ export default defineComponent({
     }
   },
   created () {
-    this.getUsers()
+    // this.getUsers()
+    this.getDats(1)
     this.$api.get('roles').then((res) => {
       this.roles = []
       res.data.forEach((item) => {
@@ -255,6 +287,23 @@ export default defineComponent({
     })
   },
   methods: {
+    onRequest (props) {
+      this.getDats(props.pagination.page)
+      // this.getUsers()
+    },
+    getDats (page) {
+      this.loading = true
+      this.$api.get('users/colegiado', {
+        params: { page: page, filter: this.colegiadoSearch }
+      }).then((res) => {
+        this.users = res.data.data
+        this.pagination.page = res.data.current_page
+        this.pagination.rowsPerPage = res.data.per_page
+        this.pagination.rowsNumber = res.data.total
+      }).finally(() => {
+        this.loading = false
+      })
+    },
     showPhoto (photo) {
       this.$q.dialog({
         html: true,

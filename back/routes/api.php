@@ -22,8 +22,8 @@ Route::post('upload/{id}/{type}', [\App\Http\Controllers\UploadController::class
 Route::apiResource('cogs', \App\Http\Controllers\CogController::class);
 Route::get('certificado/{user}', [\App\Http\Controllers\CertificadoController::class,'certificado']);
 Route::get('generarPdf/{mes}/{anio}', [\App\Http\Controllers\PayrollController::class,'generarPdf']);
-    Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::apiResource('users', \App\Http\Controllers\UserController::class);
+Route::apiResource('users', \App\Http\Controllers\UserController::class);
+Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::apiResource('roles', \App\Http\Controllers\RoleController::class);
     Route::apiResource('files', \App\Http\Controllers\FileController::class);
     Route::apiResource('sales', \App\Http\Controllers\SaleController::class);
