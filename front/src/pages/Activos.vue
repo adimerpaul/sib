@@ -136,7 +136,6 @@
 import xlsx from 'json-as-xlsx'
 import { date } from 'quasar'
 import { Printd } from 'printd'
-import { Recibo } from 'src/addons/Recibo'
 export default {
   name: 'ActivosPage',
   data () {

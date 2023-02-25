@@ -10,7 +10,12 @@ export const useCounterStore = defineStore('counter', {
     direccion: '',
     telefono: '',
     email: '',
-    cogs: {}
+    cogs: {
+      nombre: '',
+      direccion: '',
+      telefono: '',
+      email: ''
+    }
   }),
   getters: {
     doubleCount: (state) => state.counter * 2

@@ -18,21 +18,8 @@ export class Recibo {
     })
   }
 
-  kardex(user){
-    return `<html></html>`
-  }
-
-  noteFormat (sale, qr) {
-    numbers().Config._setSingular('BOLIVIANO')
-    numbers().Config._setPlural('BOLIVIANOS')
-    numbers().Config._setCentsSingular('CENTAVO')
-    numbers().Config._setCentsPlural('CENTAVOS')
-
-    const literal = numbers(sale.amount).toString()
-    return `<html>
-<head>
-<meta http-equiv='content-type' content='text/html; utf-8'>
-<style>
+  style () {
+    return `<style>
     .bold{font-weight: bold;}
     .textPrint-h1{font-size: 20px;}
     .textPrint-h5{font-size: 8px;}
@@ -45,7 +32,69 @@ export class Recibo {
     .collapse{border-collapse: collapse;}
     .background{background: #edf2f7}
     .overflow-visible {white-space: initial;}
-</style>
+</style>`
+  }
+
+  kardex (user) {
+    return `<html>
+<head>
+<meta http-equiv='content-type' content='text/html; utf-8'>
+${this.style()}
+</head>
+<body>
+<div style="font-size: 11px;font-family: sans-serif;">
+<table width="100%"  class="collapse" >
+<tr>
+    <td colspan="3">
+        <div class="p2 bold center textPrint-h1 ">
+            SOCIEDAD DE INGENIEROS DE BOLIVIA <br>
+            DEPARTAMENTAL ORURO
+        </div>
+    </td>
+</tr>
+<tr>
+    <td>
+    <img src="logoverde.png" alt="">
+    </td>
+    <td>
+    <div class="p2 bold center textPrint-h1 ">
+    FICHA PERSONAL
+    </div>
+    <td>
+    <img src="${user.img}" alt="" width="125px">
+    </td>
+    </td>
+</tr>
+<tr>
+<td colspan="3">
+<b>NOMBRE:</b>BERMUDEZ QUINTANILLA JULIO ALEJANDRO<br>
+<b>NACIDO EN</b>:ORURO CERCADO<br>
+<b>FECHA</b>:21 de abril de 1996C.I.</b>:7274696or<br>
+<b>ESPECIALIDAD</b>:INGENIEROCIVIL<br>
+<b>FECHA DE DIPLOMA ACÁDEMICO</b>: 29 DE ENERO DE 2020<br>
+<b>R.N.I. No.44522FECHA</b>:15/6/2020<br>
+<b>RECIBO DE INSCRIPCIÓN No23144FECHA</b>:21/7/2022<br>
+IMPORTE CANCELADO. Bs./$us.1113.6<br>
+<b>OBSERVACIONES</b>:<br>
+</td>
+</tr>
+</table>
+</div>
+</body>
+</html>`
+  }
+
+  noteFormat (sale, qr) {
+    numbers().Config._setSingular('BOLIVIANO')
+    numbers().Config._setPlural('BOLIVIANOS')
+    numbers().Config._setCentsSingular('CENTAVO')
+    numbers().Config._setCentsPlural('CENTAVOS')
+
+    const literal = numbers(sale.amount).toString()
+    return `<html>
+<head>
+<meta http-equiv='content-type' content='text/html; utf-8'>
+${this.style()}
 </head>
 <body>
 <div style="font-size: 11px;font-family: sans-serif;">

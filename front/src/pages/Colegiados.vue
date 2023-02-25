@@ -184,6 +184,7 @@
       </q-card-section>
     </q-card>
   </q-dialog>
+  <div id="myElement" class="hidden"></div>
 </q-page>
 </template>
 
@@ -192,6 +193,8 @@ import { defineComponent } from 'vue'
 import { LMap, LTileLayer, LMarker, LControl } from '@vue-leaflet/vue-leaflet'
 import 'leaflet/dist/leaflet.css'
 import { date } from 'quasar'
+import { Recibo } from 'src/addons/Recibo'
+import { Printd } from 'printd'
 export default defineComponent({
   name: 'ColegiadosPage',
   components: {
@@ -213,6 +216,7 @@ export default defineComponent({
         'Pando',
         'Beni'
       ],
+      d: new Printd(),
       styleMap: true,
       users: [],
       colegiadoSearch: '',
@@ -259,7 +263,15 @@ export default defineComponent({
       })
     },
     kardex (user) {
-      this.$router.push({ name: 'kardex', params: { id: user.id } })
+      this.loading = true
+      this.$api.get(`base64/${user.avatar}`).then((res) => {
+        user.img = res.data
+        const recibo = new Recibo()
+        document.getElementById('myElement').innerHTML = recibo.kardex(user)
+        this.d.print(document.getElementById('myElement'))
+      }).finally(() => {
+        this.loading = false
+      })
     },
     userResetPassword (user) {
       this.$q.dialog({

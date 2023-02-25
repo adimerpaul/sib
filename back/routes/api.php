@@ -33,6 +33,7 @@ Route::get('generarPdf/{mes}/{anio}', [\App\Http\Controllers\PayrollController::
     Route::apiResource('employees', \App\Http\Controllers\EmployeeController::class);
     Route::apiResource('payrolls', \App\Http\Controllers\PayrollController::class);
     Route::apiResource('attendance', \App\Http\Controllers\AttendanceController::class);
+    Route::get('base64/{imagen}', [\App\Http\Controllers\UploadController::class,'base64']);
     Route::post('reporteIG', [\App\Http\Controllers\ReportController::class,'reporteIG']);
     Route::post('getSales', [\App\Http\Controllers\SaleController::class,'getSales']);
     Route::post('asistencia', [\App\Http\Controllers\AttendanceController::class,'asistencia']);
