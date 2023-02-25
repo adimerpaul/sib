@@ -149,6 +149,20 @@ export default defineComponent({
           icon: 'o_business_center',
           link: '/activos',
           visible: 'contador'
+          // subLinks: [
+          //   {
+          //     title: 'Activos',
+          //     caption: 'Activos',
+          //     icon: 'o_home_repair_service',
+          //     link: '/activos'
+          //   },
+          //   {
+          //     title: 'Inventario',
+          //     caption: 'Inventario',
+          //     icon: 'o_inventory_2',
+          //     link: '/inventario'
+          //   }
+          // ]
         },
         {
           title: 'Certificados',

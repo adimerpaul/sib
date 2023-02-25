@@ -15,7 +15,7 @@
         text-color="blue"
         unelevated
         to="/"
-        label="Ingresar"
+        label="Volver"
         no-caps
       />
     </div>

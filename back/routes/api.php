@@ -28,6 +28,7 @@ Route::get('generarPdf/{mes}/{anio}', [\App\Http\Controllers\PayrollController::
     Route::apiResource('files', \App\Http\Controllers\FileController::class);
     Route::apiResource('sales', \App\Http\Controllers\SaleController::class);
     Route::apiResource('inventories', \App\Http\Controllers\InventoryController::class);
+    Route::apiResource('categories', \App\Http\Controllers\CategoryController::class);
     Route::apiResource('charges', \App\Http\Controllers\ChargeController::class);
     Route::apiResource('employees', \App\Http\Controllers\EmployeeController::class);
     Route::apiResource('payrolls', \App\Http\Controllers\PayrollController::class);

@@ -1,50 +1,12 @@
 <template>
   <q-page>
     <div class="row">
-      <div class="col-12 col-md-4">
-        <q-card bordered flat>
-          <q-item >
-            <q-item-section avatar >
-              <q-avatar square  icon="local_atm" color="green-1" text-color="green" size="60px" />
-            </q-item-section>
-            <q-item-section>
-              <q-item-label class="text-subtitle2 text-grey">Invetario nuevos</q-item-label>
-              <q-item-label class="text-h5 text-green">{{ingresoSum}} Bs</q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-card>
-      </div>
-      <div class="col-12 col-md-4">
-        <q-card bordered flat>
-          <q-item >
-            <q-item-section avatar >
-              <q-avatar square  icon="local_atm" color="red-1" text-color="red" size="60px" />
-            </q-item-section>
-            <q-item-section>
-              <q-item-label class="text-subtitle2 text-grey">Invetario usados</q-item-label>
-              <q-item-label class="text-h5 text-red">{{egresoSum}} Bs</q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-card>
-      </div>
-      <div class="col-12 col-md-4">
-        <q-card bordered flat>
-          <q-item >
-            <q-item-section avatar >
-              <q-avatar square  icon="local_atm" color="blue-1" text-color="blue" size="60px" />
-            </q-item-section>
-            <q-item-section>
-              <q-item-label class="text-subtitle2 text-grey">Invetario total</q-item-label>
-              <q-item-label class="text-h5 text-blue">{{ingresoSum-egresoSum}} Bs</q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-card>
-      </div>
       <div class="col-12">
-        <q-table :loading="loading" :rows-per-page-options="[0]" :rows="inventaries" flat bordered dense :search="inventarySearch" :columns="inventaryColumns">
+        <q-table :loading="loading" :rows-per-page-options="[0]" :rows="inventaries" flat bordered dense :search="inventarySearch">
           <template v-slot:top-right>
-            <q-btn color="green" label="Crear Ingreso" no-caps icon="add_circle_outline" @click="addIngreso" dense />
-            <q-btn flat round icon="refresh" @click="getSales" dense />
+            <q-btn label="Crear Categoria" color="primary" no-caps icon="add_circle_outline" @click="categoryCreate" dense />
+            <q-btn color="green" label="Crear Activo" no-caps icon="add_circle_outline" @click="InvetaryAdd" dense />
+            <q-btn flat round icon="refresh" @click="inventaryGet" dense />
             <q-btn flat round icon="o_download" @click="exportSales" dense />
             <q-input outlined dense v-model="inventarySearch" label="Buscar" class="q-ml-md" clearable>
               <template v-slot:append>
@@ -74,16 +36,48 @@
     <q-dialog v-model="inventarieDialog">
       <q-card style="width: 400px;min-max: 80vh;">
         <q-card-section class="row items-center q-pb-none">
-          <q-btn flat dense :icon="`${inventarie.type==='Ingreso'?'o_attach_money':'o_money_off'}`" :color="`${inventarie.type==='Ingreso'?'green':'red'}`" :class="`bg-${inventarie.type==='Ingreso'?'green':'red'}-3`" :style="`border: 1px solid ${inventarie.type==='Ingreso'?'#4caf50':'#f44336'}`" />
-          <div class="text-h6">{{inventarie.type==='Ingreso'?'Crear Ingreso':'Crear Egreso'}}</div>
+          <div class="text-h6">Crear Inventarios</div>
           <q-space />
           <q-btn flat icon="close" v-close-popup />
         </q-card-section>
         <q-card-section class="q-pt-none">
           <q-form @submit="onSubmit">
-            <q-input outlined dense v-model="inventarie.name" label="Nombre" hint="" :rules="[val => val.length > 0 || 'El nombre es requerido']" />
-            <q-input outlined dense v-model="inventarie.amount" label="Monto (Bs)" mask="#" reverse-fill-mask  :rules="[val => val.length > 0 || 'El monto es requerido']" />
-            <q-input outlined dense v-model="inventarie.description" label="Descripción" />
+            <div class="row">
+              <div class="col-12">
+                <q-select @update:model-value="codeGenerate" outlined dense v-model="inventary.category_id" :options="categories" label="Categoria" option-label="name" option-value="id" emit-value map-options hint="" />
+              </div>
+              <div class="col-12">
+                <q-input outlined dense v-model="inventary.code" label="Codigo" hint="" :rules="[val => Object.keys(val).length > 0 || 'El codigo es requerido']" />
+              </div>
+              <div class="col-12">
+                <q-input outlined dense v-model="inventary.name" label="Nombre" hint="" :rules="[val => Object.keys(val).length > 0 || 'El nombre es requerido']" />
+              </div>
+              <div class="col-12">
+                <q-input outlined dense v-model="inventary.description" label="Descripcion" hint="" :rules="[val => Object.keys(val).length > 0 || 'La descripcion es requerida']" />
+              </div>
+              <div class="col-12">
+                <q-input outlined dense v-model="inventary.price" label="Precio" hint="" :rules="[val => Object.keys(val).length > 0 || 'El precio es requerido']" />
+              </div>
+              <div class="col-12 flex flex-center">
+                <q-uploader
+                  accept=".jpg, .png"
+                  multiple
+                  auto-upload
+                  label="Arrastra una imagen o haz click para seleccionar"
+                  @uploading="uploadingFn"
+                  ref="uploader"
+                  max-files="1"
+                  auto-expand
+                  :url="`${$url}upload/1/shopUser`"
+                  stack-label="upload image"/>
+              </div>
+              <div class="col-12">
+                <q-input outlined dense v-model="inventary.quantity" label="Cantidad" hint="" :rules="[val => Object.keys(val).length > 0 || 'La cantidad es requerida']" />
+              </div>
+              <div class="col-12">
+                <q-select outlined dense v-model="inventary.user_id" :options="users" label="Usuario" option-label="name" option-value="id" emit-value map-options hint="" />
+              </div>
+            </div>
             <div class="row">
               <div class="col-6 flex flex-center">
                 <q-btn :loading="loading" color="primary" label="Guardar" type="submit" no-caps icon="o_save" dense />
@@ -92,11 +86,49 @@
                 <q-btn :loading="loading" color="negative" label="Cancelar" type="reset" no-caps icon="cancel" dense v-close-popup />
               </div>
             </div>
+            <pre>{{inventary}}</pre>
           </q-form>
         </q-card-section>
       </q-card>
     </q-dialog>
+    <q-dialog v-model="categoryShow">
+      <q-card>
+        <q-card-section class="row items-center q-pb-none">
+          <div class="text-h6">Control Categorias</div>
+          <q-space />
+          <q-btn flat icon="close" v-close-popup />
+        </q-card-section>
+        <q-card-section>
+          <q-form @submit.prevent="categorySubmit" ref="myForm">
+          <div class="row">
+            <div class="col-12 col-md-8">
+              <q-input outlined dense v-model="category.name" label="Nombre" hint="" :rules="[val => val.length > 0 || 'El nombre es requerido']" />
+            </div>
+            <div class="col-12 col-md-4 text-center q-pt-xs">
+              <q-btn :loading="loading" color="primary" label="Guardar" type="submit" no-caps icon="o_save" dense  />
+            </div>
+          </div>
+          </q-form>
+          <q-table :loading="loading" :rows-per-page-options="[0]" :rows="categories" flat bordered dense :search="inventarySearch" :columns="categoryColumns">
+            <template v-slot:top-right>
+              <q-btn flat round icon="refresh" @click="categoriesGet" dense />
+              <q-input outlined dense v-model="inventarySearch" label="Buscar" class="q-ml-md" clearable>
+                <template v-slot:append>
+                  <q-icon name="search" />
+                </template>
+              </q-input>
+            </template>
+            <template v-slot:body-cell-actions="props">
+              <q-td :props="props" auto-width>
+                <q-btn flat size="11px" class="q-pa-none q-ma-none" round @click="deleteCategory(props.row)" icon="delete" dense color="red" title="Anular"/>
+              </q-td>
+            </template>
+          </q-table>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
     <div id="myElement" class="hidden"></div>
+    <pre>{{ users }}</pre>
   </q-page>
 </template>
 
@@ -111,15 +143,26 @@ export default {
     return {
       d: new Printd(),
       inventarieDialog: false,
+      categoryStatus: 'Crear',
       loading: false,
       inventaries: [],
-      inventarie: {
+      categoryShow: false,
+      inventary: {
         name: '',
-        amount: 0,
-        status: '',
-        type: '',
-        description: ''
+        code: '',
+        description: '',
+        price: '',
+        image: '',
+        quantity: '',
+        category_id: 1,
+        user_id: ''
       },
+      categories: [],
+      category: {
+        name: '',
+        code: ''
+      },
+      users: [],
       inventarySearch: '',
       inventaryColumns: [
         { name: 'actions', label: 'Acciones', field: 'actions', align: 'left', sortable: false },
@@ -129,17 +172,93 @@ export default {
         { name: 'date', label: 'Fecha', field: 'date', align: 'left', sortable: true },
         { name: 'time', label: 'Hora', field: 'time', align: 'left', sortable: true },
         { name: 'user', label: 'Usuario', field: (row) => row.user.name, align: 'left', sortable: true }
+      ],
+      categoryColumns: [
+        { name: 'actions', label: 'Acciones', field: 'actions', align: 'left', sortable: false },
+        { name: 'id', label: 'Id', field: 'id', align: 'left', sortable: true },
+        { name: 'name', label: 'Nombre', field: 'name', align: 'left', sortable: true },
+        { name: 'code', label: 'Codigo', field: 'code', align: 'left', sortable: true }
       ]
     }
   },
   created () {
-    this.getSales()
+    this.inventaryGet()
+    this.categoriesGet()
+    this.usersGet()
   },
   methods: {
+    uploadingFn (e) {
+      e.xhr.onload = () => {
+        if (e.xhr.readyState === e.xhr.DONE) {
+          if (e.xhr.status === 200) {
+            this.inventary.image = e.xhr.response
+          }
+        }
+      }
+    },
+    usersGet () {
+      this.users = [{
+        id: null,
+        name: ''
+      }]
+      this.$api.get('users').then((response) => {
+        response.data.forEach((user) => {
+          this.users.push(user)
+        })
+      })
+    },
+    deleteCategory (category) {
+      this.$q.dialog({
+        title: 'Eliminar',
+        message: '¿Estas seguro de eliminar esta categoria?',
+        cancel: true,
+        persistent: true
+      }).onOk(() => {
+        this.$q.loading.show()
+        this.$api.delete('categories/' + category.id).then(() => {
+          this.categoriesGet()
+        }).finally(() => {
+          this.$q.loading.hide()
+        })
+      })
+    },
+    categoryCreate () {
+      this.categoryStatus = 'Crear'
+      this.category = {
+        name: '',
+        code: ''
+      }
+      this.categoryShow = true
+    },
+    categorySubmit () {
+      this.$q.loading.show()
+      if (this.categoryStatus === 'Crear') {
+        this.$api.post('categories', this.category).then(() => {
+          this.categoriesGet()
+          this.$refs.myForm.reset()
+          this.category = {
+            name: '',
+            code: ''
+          }
+        }).finally(() => {
+          this.$q.loading.hide()
+        })
+      } else {
+        this.$api.put('categories/' + this.category.id, this.category).then(() => {
+          this.categoriesGet()
+        }).finally(() => {
+          this.$q.loading.hide()
+        })
+      }
+    },
+    categoriesGet () {
+      this.$api.get('categories').then((response) => {
+        this.categories = response.data
+      })
+    },
     exportSales () {
       const data = [
         {
-          sheet: 'Adults',
           columns: [
             { label: 'N', value: 'id' },
             { label: 'Nombre', value: 'name' },
@@ -173,7 +292,7 @@ export default {
         this.loading = true
         this.$api.post('anularSale', inventarie).then((response) => {
           console.log(response)
-          this.getSales()
+          this.inventaryGet()
         }).catch((error) => {
           console.log(error)
         }).finally(() => {
@@ -187,28 +306,19 @@ export default {
     },
     onSubmit () {
       this.loading = true
-      this.$api.post('inventaries', this.inventarie).then((response) => {
+      this.$api.post('inventories', this.inventary).then((response) => {
         console.log(response)
         this.inventarieDialog = false
-        this.getSales()
-
-        const recibo = new Recibo()
-        recibo.note(response.data).then(res => {
-          document.getElementById('myElement').innerHTML = res
-          this.d.print(document.getElementById('myElement'))
-        })
+        this.inventaryGet()
       }).catch((error) => {
         console.log(error)
       }).finally(() => {
         this.loading = false
       })
     },
-    getSales () {
+    inventaryGet () {
       this.loading = true
-      this.$api.post('getSales', {
-        dateIni: this.dateIni,
-        dateEnd: this.dateEnd
-      }).then((response) => {
+      this.$api.get('inventories').then((response) => {
         this.inventaries = response.data
       }).catch((error) => {
         console.log(error)
@@ -216,14 +326,35 @@ export default {
         this.loading = false
       })
     },
-    addIngreso () {
+    InvetaryAdd () {
+      if (this.categories === []) {
+        this.$q.notify({
+          message: 'No hay categorias',
+          color: 'negative',
+          position: 'top',
+          icon: 'warning'
+        })
+        return false
+      }
       this.inventarieDialog = true
-      this.inventarie = {
-        name: 'INGRESO POR VENTA',
-        amount: '',
-        status: 'Cancelado',
-        type: 'Ingreso',
-        description: ''
+      this.inventary = {
+        name: '',
+        description: '',
+        price: '',
+        image: '',
+        quantity: '',
+        category_id: this.categories === [] ? null : this.categories[0].id,
+        user_id: ''
+      }
+      this.codeGenerate(this.categories === [] ? null : this.categories[0].id)
+    },
+    codeGenerate (id) {
+      if (id == null) {
+        this.inventary.code = ''
+      } else {
+        this.$api.get('categories/' + id).then((response) => {
+          this.inventary.code = response.data
+        })
       }
     },
     addEgreso () {
@@ -237,29 +368,6 @@ export default {
         description: '',
         user_id: this.$store.user.id
       }
-    }
-  },
-  computed: {
-    ingresoSum () {
-      let sum = 0
-      this.inventaries.forEach(inventarie => {
-        if (inventarie.type === 'Ingreso' && inventarie.status === 'Cancelado') {
-          sum += parseFloat(inventarie.amount)
-        }
-      })
-      return Math.round(sum * 100) / 100
-    },
-    egresoSum () {
-      let sum = 0
-      this.inventaries.forEach(inventarie => {
-        if (inventarie.type === 'Egreso' && inventarie.status === 'Cancelado') {
-          sum += parseFloat(inventarie.amount)
-        }
-      })
-      return Math.round(sum * 100) / 100
-    },
-    saldo () {
-      return this.ingresoSum - this.egresoSum
     }
   }
 }
