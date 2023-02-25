@@ -15,12 +15,12 @@ return new class extends Migration
     {
         Schema::create('inventories', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('code');
-            $table->string('description');
-            $table->double('price');
-            $table->string('image');
-            $table->integer('quantity');
+            $table->string('name')->nullable();
+            $table->string('code')->nullable();
+            $table->string('description')->nullable();
+            $table->double('price')->nullable();
+            $table->string('image')->nullable()->default('default.png');
+            $table->integer('quantity')->nullable();
             $table->unsignedBigInteger('category_id')->nullable();
             $table->foreign('category_id')->references('id')->on('categories');
             $table->unsignedBigInteger('user_id')->nullable();

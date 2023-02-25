@@ -218,6 +218,13 @@ export default {
           this.categoriesGet()
         }).finally(() => {
           this.$q.loading.hide()
+        }).catch(() => {
+          this.$q.notify({
+            message: 'No se puede eliminar esta categoria porque tiene activos asociados',
+            color: 'negative',
+            icon: 'warning',
+            position: 'top'
+          })
         })
       })
     },
@@ -326,7 +333,7 @@ export default {
       })
     },
     InvetaryAdd () {
-      if (this.categories === []) {
+      if (this.categories.length === 0) {
         this.$q.notify({
           message: 'No hay categorias',
           color: 'negative',
