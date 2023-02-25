@@ -33,6 +33,12 @@
                   </q-item-section>
                   <q-item-section>Resetear contraseña</q-item-section>
                 </q-item>
+                <q-item clickable v-close-popup @click="kardex(props.row)">
+                  <q-item-section avatar>
+                    <q-avatar icon="o_receipt" />
+                  </q-item-section>
+                  <q-item-section>Kardex</q-item-section>
+                </q-item>
               </q-list>
             </q-btn-dropdown>
           </q-td>
@@ -251,6 +257,9 @@ export default defineComponent({
         title: 'Foto',
         message: `<img src="${photo}" style="width:100%">`
       })
+    },
+    kardex (user) {
+      this.$router.push({ name: 'kardex', params: { id: user.id } })
     },
     userResetPassword (user) {
       this.$q.dialog({
