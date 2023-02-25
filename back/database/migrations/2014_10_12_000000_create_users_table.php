@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('materno')->nullable();
             $table->string('nombres')->nullable();
             $table->date('fechaNac')->nullable();
-            $table->date('fechaRegistro')->nullable();
+            $table->date        ('fechaRegistro')->nullable();
             $table->string('departamento')->nullable();
             $table->string('nacimiento')->nullable();
             $table->string('sexo')->nullable();
