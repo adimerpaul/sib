@@ -33,7 +33,7 @@ return new class extends Migration
             $table->string('oficina')->nullable();
             $table->string('celular')->nullable();
             $table->string('especialidad')->nullable();
-            $table->date('fechaDiploma')->nullable();
+            $table->string('fechaDiploma')->nullable();
             $table->string('universidad')->nullable();
             $table->string('status')->nullable()->default('activo');
             $table->string('avatar')->nullable()->default('avatar.png');
