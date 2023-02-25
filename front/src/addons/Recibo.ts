@@ -67,15 +67,15 @@ ${this.style()}
 </tr>
 <tr>
 <td colspan="3">
-<b>NOMBRE:</b>BERMUDEZ QUINTANILLA JULIO ALEJANDRO<br>
-<b>NACIDO EN</b>:ORURO CERCADO<br>
-<b>FECHA</b>:21 de abril de 1996C.I.</b>:7274696or<br>
-<b>ESPECIALIDAD</b>:INGENIEROCIVIL<br>
-<b>FECHA DE DIPLOMA ACÁDEMICO</b>: 29 DE ENERO DE 2020<br>
-<b>R.N.I. No.44522FECHA</b>:15/6/2020<br>
-<b>RECIBO DE INSCRIPCIÓN No23144FECHA</b>:21/7/2022<br>
-IMPORTE CANCELADO. Bs./$us.1113.6<br>
-<b>OBSERVACIONES</b>:<br>
+<tr><td colspan="2"><b>NOMBRE:</b> ${user.paterno} ${user.materno} ${user.nombres}</td></tr>
+<tr><td colspan="2"><b>NACIDO EN</b>: ${user.departamento} ${user.nacimiento}</td></tr>
+<tr><td><b>FECHA</b>: ${user.fechaNac} </td><td> <b>C.I.</b>: ${user.ci} ${user.expedido}</td></tr>
+<tr><td colspan="2"><b>ESPECIALIDAD</b>: ${user.expecilidad}</td></tr>
+<tr><td colspan="2"><b>FECHA DE DIPLOMA ACÁDEMICO</b>: ${user.fechaDiploma}</td></tr>
+<tr><td><b>R.N.I. No.</b> ${user.rni} </td><td><b>FECHA</b>: ${user.fechaRegistro}</td></tr>
+<tr><td ><b>RECIBO DE INSCRIPCIÓN No</b> ${user.rni} </td><td><b>FECHA</b>: ${user.fechaRegistro}</td></tr>
+<<tr><td colspan="2">b>IMPORTE CANCELADO. Bs./$us. </b>1113.6
+<tr><td colspan="2"><b>OBSERVACIONES:</b>
 </td>
 </tr>
 </table>
