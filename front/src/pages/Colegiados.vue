@@ -440,7 +440,8 @@ export default defineComponent({
         this.$api.post('users', this.user).then(() => {
           this.loading = false
           this.userDialog = false
-          this.getUsers()
+          // this.getUsers()
+          this.getDats(1)
         }).catch((error) => {
           this.$q.notify({
             message: error.response.data.message,
@@ -455,7 +456,7 @@ export default defineComponent({
           console.log(response.data)
           this.loading = false
           this.userDialog = false
-          this.getUsers()
+          this.getDats(1)
         }).catch((error) => {
           this.$q.notify({
             message: error.response.data.message,
