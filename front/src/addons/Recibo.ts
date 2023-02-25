@@ -36,6 +36,7 @@ export class Recibo {
   }
 
   kardex (user) {
+    if (user.especialidad === undefined) user.especialidad = ''
     return `<html>
 <head>
 <meta http-equiv='content-type' content='text/html; utf-8'>
@@ -65,8 +66,8 @@ ${this.style()}
     </td>
     </td>
 </tr>
-<tr>
-<td colspan="3">
+</table>
+<table width="100%"  class="collapse" style="font-size:18px;">
 <tr><td colspan="2"><b>NOMBRE:</b> ${user.paterno} ${user.materno} ${user.nombres}</td></tr>
 <tr><td colspan="2"><b>NACIDO EN</b>: ${user.departamento} ${user.nacimiento}</td></tr>
 <tr><td><b>FECHA</b>: ${user.fechaNac} </td><td> <b>C.I.</b>: ${user.ci} ${user.expedido}</td></tr>
@@ -74,11 +75,9 @@ ${this.style()}
 <tr><td colspan="2"><b>FECHA DE DIPLOMA ACÁDEMICO</b>: ${user.fechaDiploma}</td></tr>
 <tr><td><b>R.N.I. No.</b> ${user.rni} </td><td><b>FECHA</b>: ${user.fechaRegistro}</td></tr>
 <tr><td ><b>RECIBO DE INSCRIPCIÓN No</b> ${user.rni} </td><td><b>FECHA</b>: ${user.fechaRegistro}</td></tr>
-<<tr><td colspan="2">b>IMPORTE CANCELADO. Bs./$us. </b>1113.6
-<tr><td colspan="2"><b>OBSERVACIONES:</b>
-</td>
-</tr>
+<tr><td colspan="2"><b>OBSERVACIONES:</b></tr>
 </table>
+
 </div>
 </body>
 </html>`
