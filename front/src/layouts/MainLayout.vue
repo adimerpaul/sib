@@ -163,6 +163,13 @@ export default defineComponent({
           icon: 'manage_accounts',
           link: '/planillas',
           visible: 'administrador'
+        },
+        {
+          title: 'Modulo Reportes',
+          caption: 'reporte',
+          icon: 'receipt_long',
+          link: '/reportes',
+          visible: 'administrador'
         }
       ],
       leftDrawerOpen: false
