@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Letter;
 use App\Http\Requests\StoreLetterRequest;
 use App\Http\Requests\UpdateLetterRequest;
+use Illuminate\Http\Request;
 
 class LetterController extends Controller
 {
@@ -16,6 +17,10 @@ class LetterController extends Controller
     public function index()
     {
         //
+    }
+
+    public function listLetter(Request $request){
+        return Letter::where('user_id',$request->user()->id)->get();
     }
 
     /**
@@ -37,6 +42,10 @@ class LetterController extends Controller
     public function store(StoreLetterRequest $request)
     {
         //
+        $request['user_id']=$request->user()->id;
+        $request['date']=date('Y-m-d');
+        return Letter::create($request->all());
+
     }
 
     /**

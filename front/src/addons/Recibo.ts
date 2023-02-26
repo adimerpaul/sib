@@ -32,7 +32,7 @@ export class Recibo {
     .collapse{border-collapse: collapse;}
     .background{background: #edf2f7}
     .overflow-visible {white-space: initial;}
-    span{text-decoration: underline;}
+    .subrrayado{text-decoration: underline;}
 </style>`
   }
 
@@ -69,15 +69,15 @@ ${this.style()}
 </tr>
 </table>
 <table width="100%"  class="collapse" style="font-size:18px; ">
-<tr><td colspan="2" style=" height: 50px;"><b>NOMBRE:</b> <span> ${user.paterno} ${user.materno} ${user.nombres}</span></td></tr>
-<tr><td style=" height: 50px; " colspan="2"><b>NACIDO EN</b>: <span>${user.departamento} ${user.nacimiento} </span></td></tr>
+<tr><td colspan="2" style=" height: 50px;"><b>NOMBRE:</b> <span class="subrrayado"> ${user.paterno} ${user.materno} ${user.nombres}</span></td></tr>
+<tr><td style=" height: 50px; " colspan="2"><b>NACIDO EN</b>: <span class="subrrayado">${user.departamento} ${user.nacimiento} </span></td></tr>
 
-<tr><td style=" height: 50px; "><b>FECHA</b>: <span>${user.fechaNac} </span></td><td style=" height: 50px; "> <b>C.I.</b>: <span>${user.ci} ${user.expedido}</span></td></tr>
-<tr><td style=" height: 50px; " colspan="2"><b>ESPECIALIDAD</b>: <span>${user.especialidad}</td></tr>
-<tr><td style=" height: 50px; " colspan="2"><b>FECHA DE DIPLOMA ACÁDEMICO</b>: <span>${user.fechaDiploma}</td></tr>
-<tr><td style=" height: 50px; "><b>R.N.I. No.</b> <span>${user.rni} </td><td style=" height: 50px; "><b>FECHA</b>:<span> ${user.fechaRegistro}</span></td></tr>
+<tr><td style=" height: 50px; "><b>FECHA</b>: <span class="subrrayado">${user.fechaNac} </span></td><td style=" height: 50px; "> <b>C.I.</b>: <span class="subrrayado">${user.ci} ${user.expedido}</span></td></tr>
+<tr><td style=" height: 50px; " colspan="2"><b>ESPECIALIDAD</b>: <span class="subrrayado">${user.especialidad}</td></tr>
+<tr><td style=" height: 50px; " colspan="2"><b>FECHA DE DIPLOMA ACÁDEMICO</b>: <span class="subrrayado">${user.fechaDiploma}</td></tr>
+<tr><td style=" height: 50px; "><b>R.N.I. No.</b> <span class="subrrayado">${user.rni} </td><td style=" height: 50px; "><b>FECHA</b>:<span class="subrrayado"> ${user.fechaRegistro}</span></td></tr>
 
-<tr><td style=" height: 50px; " ><b>RECIBO DE INSCRIPCIÓN No</b> <span>${user.rni} </span></td><td style=" height: 50px; "><b>FECHA</b>: <span>${user.fechaRegistro}</span></td></tr>
+<tr><td style=" height: 50px; " ><b>RECIBO DE INSCRIPCIÓN No</b> <span class="subrrayado">${user.rni} </span></td><td style=" height: 50px; "><b>FECHA</b>: <span class="subrrayado">${user.fechaRegistro}</span></td></tr>
 
 <tr><td style=" height: 50px; " colspan="2"><b>OBSERVACIONES: </b> _________________________________________________________________________<br><br>_________________________________________________________________________<br><br>_________________________________________________________________________</tr>
 </table>

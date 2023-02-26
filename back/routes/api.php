@@ -33,6 +33,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::apiResource('employees', \App\Http\Controllers\EmployeeController::class);
     Route::apiResource('payrolls', \App\Http\Controllers\PayrollController::class);
     Route::apiResource('attendance', \App\Http\Controllers\AttendanceController::class);
+    Route::apiResource('letters', \App\Http\Controllers\LetterController::class);
+    Route::post('listLetter', [\App\Http\Controllers\LetterController::class,'listLetter']);
     Route::get('base64/{imagen}', [\App\Http\Controllers\UploadController::class,'base64']);
     Route::post('reporteIG', [\App\Http\Controllers\ReportController::class,'reporteIG']);
     Route::post('getSales', [\App\Http\Controllers\SaleController::class,'getSales']);

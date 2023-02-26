@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('letters', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable();
-            $table->string('status')->nullable()->default('pediente');
+            $table->string('status')->nullable()->default('pendiente');
             $table->string('description')->nullable();
             $table->date('date')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();

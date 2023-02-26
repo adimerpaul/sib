@@ -28,6 +28,45 @@
         no-caps
       />
     </div>
+    <div class="col-12">
+      <q-table title="Treats" :rows="letters" :columns="colLetter" row-key="name" :search="letterSearch">
+        <template v-slot:top-right>
+          <q-btn color="green" label="Crear Solicitud" @click="verLetter"/>
+          <q-input outlined dense v-model="letterSearch" label="Buscar" class="q-ml-md" clearable>
+           <template v-slot:append>
+             <q-icon name="search" />
+           </template>
+         </q-input>
+       </template>
+       <template v-slot:body-cell-status="props">
+          <q-td :props="props">
+          <q-badge :color="props.row.status==='pendiente'?'red':'green'"  :label="props.row.status" />
+        </q-td>
+       </template>
+    </q-table>
+    </div>
+
+    <q-dialog v-model="dialogLetter">
+    <q-card>
+    <q-card-section>
+    <div class="text-h6">REGISTRAR SOLICITUD</div>
+    </q-card-section>
+    <q-card-section>
+      <q-form @submit="onsubmit" class="q-gutter-md" >
+        <div class="row">
+
+          <div class="col-6"><q-select outlined v-model="letter.name" label="Titulo" :options="['ESTUDIO','TRABAJO','CURSOS','OTROS']"/></div>
+          <div class="col-6"><q-input outlined v-model="letter.description" label="Descripcion" /></div>
+        </div>
+          <q-card-actions align="right">
+            <q-btn  label="Cancelar" color="red" v-close-popup />
+            <q-btn  label="Registrar" color="green" type="submit" />
+          </q-card-actions>
+       </q-form>
+    </q-card-section>
+    </q-card>
+    </q-dialog>
+
   </div>
 </q-page>
 </template>
@@ -36,7 +75,44 @@
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'CertificadosPage'
+  name: 'CertificadosPage',
+  data () {
+    return {
+      loading: false,
+      letters: [],
+      letter: {},
+      colLetter: [
+        { name: 'opciones', label: 'Opciones', field: 'opciones', align: 'left', sortable: true, style: 'width: 100px' },
+        { name: 'date', label: 'Fecha', field: 'date', align: 'left', sortable: true },
+        { name: 'name', label: 'Nombre', field: 'name', align: 'left', sortable: true },
+        { name: 'status', label: 'Estado', field: 'status', align: 'left', sortable: true },
+        { name: 'description', label: 'Descripcion', field: 'description', align: 'left', sortable: true }
+      ],
+      letterSearch: '',
+      dialogLetter: false
+    }
+  },
+  created () {
+    this.getCerti()
+  },
+  methods: {
+    verLetter () {
+      this.letter = {}
+      this.dialogLetter = true
+    },
+    getCerti () {
+      this.$api.post('listLetter')
+        .then(response => {
+          this.letters = response.data
+        })
+    },
+    onsubmit () {
+      this.$api.post('letters', this.letter).then(res => {
+        this.dialogLetter = false
+        this.getCerti()
+      })
+    }
+  }
 })
 </script>
 
