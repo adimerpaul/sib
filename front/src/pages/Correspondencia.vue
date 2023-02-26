@@ -14,6 +14,39 @@
           </template>
         </q-input>
       </template>
+      <template v-slot:body-cell-actions="props">
+        <q-td :props="props">
+          <q-btn-dropdown round dense dropdown-icon="more_vert" color="primary">
+            <q-list>
+              <q-item clickable @click="mailEdit(props.row)">
+                <q-item-section avatar>
+                  <q-icon name="edit"/>
+                </q-item-section>
+                <q-item-section>Editar</q-item-section>
+              </q-item>
+              <q-item clickable @click="mailDelete(props.row.id)">
+                <q-item-section avatar>
+                  <q-icon name="delete"/>
+                </q-item-section>
+                <q-item-section>Eliminar</q-item-section>
+              </q-item>
+            </q-list>
+          </q-btn-dropdown>
+        </q-td>
+      </template>
+      <template v-slot:body-cell-archivoDigital="props">
+        <q-td :props="props">
+          {{props.row.archivoDigital ? props.row.archivoDigital.substring(10) : ''}}
+          <a :href="`${$url}../files/${props.row.archivoDigital}`" target="_blank" v-if="props.row.archivoDigital">
+            <q-icon name="cloud_download"/>
+          </a>
+        </q-td>
+      </template>
+      <template v-slot:body-cell-type="props">
+        <q-td :props="props">
+          <q-badge :color="props.row.type === 'Entrada' ? 'green' : 'red'" :label="props.row.type"/>
+        </q-td>
+      </template>
     </q-table>
   </div>
 </div>
@@ -33,7 +66,7 @@
       <q-input outlined dense v-model="mail.dirigido" label="Dirigido" :rules="[val => val && val.length > 0 || 'Campo requerido']"/>
       <q-input outlined dense v-model="mail.observaciones" label="Observaciones" :rules="[val => val && val.length > 0 || 'Campo requerido']"/>
       <q-uploader
-        accept=".jpg, .png"
+        v-if="mail.type === 'Entrada'"
         multiple
         auto-upload
         label="Arrastra un archivo o haz click para seleccionar"
@@ -42,7 +75,7 @@
         ref="uploader"
         max-files="1"
         auto-expand
-        :url="`${$url}upload/1/'fileCreate'}`"
+        :url="`${$url}upload/1/fileCreate`"
         stack-label="upload image"/>
       <q-input dense readonly v-model="mail.type" label="Tipo" :rules="[val => val && val.length > 0 || 'Campo requerido']"/>
       <q-card-actions align="right">
@@ -123,7 +156,7 @@ export default {
       }
     },
     mailSubmit () {
-      console.log(this.mail)
+      this.loading = true
       if (this.mailStatus === 'add') {
         if (this.mail.archivoDigital === '') {
           this.$q.notify({
@@ -139,14 +172,40 @@ export default {
           this.mails.push(res.data)
           this.mailShow = false
           this.mailGet()
+        }).finally(() => {
+          this.loading = false
         })
       } else {
         this.$api.put(`mails/${this.mail.id}`, this.mail).then(res => {
           this.mails[this.mails.findIndex(item => item.id === this.mail.id)] = res.data
           this.mailShow = false
           this.mailGet()
+        }).finally(() => {
+          this.loading = false
         })
       }
+    },
+    mailEdit (mail) {
+      this.mailShow = true
+      this.mailStatus = 'edit'
+      this.mail = mail
+    },
+    mailDelete (id) {
+      this.$q.dialog({
+        title: 'Eliminar',
+        message: '¿Está seguro de eliminar este registro?',
+        cancel: true,
+        persistent: true
+      }).onOk(() => {
+        this.loading = true
+        this.$api.delete(`mails/${id}`).then(res => {
+          this.mails.splice(this.mails.findIndex(item => item.id === id), 1)
+          this.mailShow = false
+          this.mailGet()
+        }).finally(() => {
+          this.loading = false
+        })
+      })
     },
     mailAdd (type) {
       this.mailShow = true
