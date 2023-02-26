@@ -60,8 +60,8 @@
       <q-form @submit="onsubmit" class="q-gutter-md" >
         <div class="row">
 
-          <div class="col-6"><q-select outlined v-model="letter.name" label="Titulo" :options="['ESTUDIO','TRABAJO','CURSOS','OTROS']"/></div>
-          <div class="col-6"><q-input outlined v-model="letter.description" label="Descripcion" /></div>
+          <div class="col-6"><q-select outlined v-model="letter.name" label="Titulo" :options="['ESTUDIO','TRABAJO','CURSOS','OTROS']" :rules="[val => val.length > 0 || 'Password requerido']" /></div>
+          <div class="col-6"><q-input outlined v-model="letter.description" label="Descripcion" :rules="[val => val.length > 0 || 'Password requerido']"/></div>
         </div>
           <q-card-actions align="right">
             <q-btn  label="Cancelar" color="red" v-close-popup />
