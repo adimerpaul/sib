@@ -38,6 +38,11 @@
            </template>
          </q-input>
        </template>
+       <template v-slot:body-cell-opciones="props">
+        <q-td :props="props">
+           <q-btn color="green" icon="check" dense v-if="$store.roles.includes('administrador')"/>
+      </q-td>
+     </template>
        <template v-slot:body-cell-status="props">
           <q-td :props="props">
           <q-badge :color="props.row.status==='pendiente'?'red':'green'"  :label="props.row.status" />
@@ -101,7 +106,8 @@ export default defineComponent({
       this.dialogLetter = true
     },
     getCerti () {
-      this.$api.post('listLetter')
+      const ver = this.$store.roles.includes('administrador')
+      this.$api.post('listLetter', { permiso: ver })
         .then(response => {
           this.letters = response.data
         })
