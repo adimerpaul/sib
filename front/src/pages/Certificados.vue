@@ -65,7 +65,7 @@
         </div>
           <q-card-actions align="right">
             <q-btn  label="Cancelar" color="red" v-close-popup />
-            <q-btn  label="Registrar" color="green" type="submit" />
+            <q-btn  label="Registrar" color="green" type="submit" :loading="loading"/>
           </q-card-actions>
        </q-form>
     </q-card-section>
@@ -92,7 +92,11 @@ export default defineComponent({
         { name: 'date', label: 'Fecha', field: 'date', align: 'left', sortable: true },
         { name: 'name', label: 'Nombre', field: 'name', align: 'left', sortable: true },
         { name: 'status', label: 'Estado', field: 'status', align: 'left', sortable: true },
-        { name: 'description', label: 'Descripcion', field: 'description', align: 'left', sortable: true }
+        { name: 'description', label: 'Descripcion', field: 'description', align: 'left', sortable: true },
+        { name: 'ci', label: 'ci', field: row => row.user.ci, align: 'left', sortable: true },
+        { name: 'nombre', label: 'nombre', field: row => row.user.nombres, align: 'left', sortable: true },
+        { name: 'paterno', label: 'paterno', field: row => row.user.paterno, align: 'left', sortable: true },
+        { name: 'materno', label: 'materno', field: row => row.user.materno, align: 'left', sortable: true }
       ],
       letterSearch: '',
       dialogLetter: false
@@ -109,8 +113,10 @@ export default defineComponent({
         cancel: true,
         persistent: false
       }).onOk(() => {
+        this.loading = true
         this.$api.put('letters/' + ped.id, ped).then(res => {
           this.getCerti()
+          this.loading = false
         })
       }).onOk(() => {
         // console.log('>>>> second OK catcher')
@@ -128,6 +134,7 @@ export default defineComponent({
       const ver = this.$store.roles.includes('administrador')
       this.$api.post('listLetter', { permiso: ver })
         .then(response => {
+          console.log(response.data)
           this.letters = response.data
         })
     },

@@ -21,9 +21,9 @@ class LetterController extends Controller
 
     public function listLetter(Request $request){
        if($request->permiso)
-        return Letter::all();
+        return Letter::with('user')->get();
        else
-        return Letter::where('user_id',$request->user()->id)->get();
+        return Letter::with('user')->where('user_id',$request->user()->id)->get();
     }
 
     /**

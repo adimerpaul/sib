@@ -8,10 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Letter extends Model
 {
     use HasFactory;
-    protected $fillable= [    'name',
+    protected $fillable= [
+            'name',
     'status',
     'description',
     'date',
     'user_id',
     ];
+
+    public function user(){
+        return $this->belongsTo(\App\Models\User::class);
+    } 
 }
