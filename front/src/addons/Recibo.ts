@@ -104,7 +104,7 @@ ${this.style()}
 <table width="100%"  class="collapse" >
     <tr>
         <td width="33%">
-            <div class="p2 bold center">${this.store.nombre}</div>
+            <div class="p2 bold center">${this.store.cogs.nombre}</div>
             <div class="p2 center">No. Punto 0</div>
         </td>
         <td></td>
@@ -126,9 +126,9 @@ ${this.style()}
     <tr>
         <td>
             <div class="p2 center">
-                ${this.store.direccion}
+                ${this.store.cogs.direccion}
             </div>
-            <div class="p2 center">Teléfono: ${this.store.telefono}</div>
+            <div class="p2 center">Teléfono: ${this.store.cogs.telefono}</div>
             <div class="p2 center">Oruro</div>
         </td>
         <td></td>

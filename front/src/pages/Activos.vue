@@ -86,7 +86,6 @@
                 <q-btn :loading="loading" color="negative" label="Cancelar" type="reset" no-caps icon="cancel" dense v-close-popup />
               </div>
             </div>
-            <pre>{{inventary}}</pre>
           </q-form>
         </q-card-section>
       </q-card>
@@ -128,7 +127,6 @@
       </q-card>
     </q-dialog>
     <div id="myElement" class="hidden"></div>
-    <pre>{{ users }}</pre>
   </q-page>
 </template>
 
