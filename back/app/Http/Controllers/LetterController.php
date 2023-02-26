@@ -83,6 +83,9 @@ class LetterController extends Controller
     public function update(UpdateLetterRequest $request, Letter $letter)
     {
         //
+        $request['status']='APROBADO';
+        $letter->update($request->all());
+
     }
 
     /**

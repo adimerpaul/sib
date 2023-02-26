@@ -40,7 +40,7 @@
        </template>
        <template v-slot:body-cell-opciones="props">
         <q-td :props="props">
-           <q-btn color="green" icon="check" dense v-if="$store.roles.includes('administrador')"/>
+           <q-btn color="green" icon="check" dense v-if="props.row.status==='pendiente' && $store.roles.includes('administrador')" @click="validar(props.row)"/>
       </q-td>
      </template>
        <template v-slot:body-cell-status="props">
@@ -86,6 +86,7 @@ export default defineComponent({
       loading: false,
       letters: [],
       letter: {},
+      store: '',
       colLetter: [
         { name: 'opciones', label: 'Opciones', field: 'opciones', align: 'left', sortable: true, style: 'width: 100px' },
         { name: 'date', label: 'Fecha', field: 'date', align: 'left', sortable: true },
@@ -101,6 +102,24 @@ export default defineComponent({
     this.getCerti()
   },
   methods: {
+    validar (ped) {
+      this.$q.dialog({
+        title: 'APROBOBAR SOLICITUD',
+        message: 'Esta seguro de aprobar?',
+        cancel: true,
+        persistent: false
+      }).onOk(() => {
+        this.$api.put('letters/' + ped.id, ped).then(res => {
+          this.getCerti()
+        })
+      }).onOk(() => {
+        // console.log('>>>> second OK catcher')
+      }).onCancel(() => {
+        // console.log('>>>> Cancel')
+      }).onDismiss(() => {
+        // console.log('I am triggered on both OK and Cancel')
+      })
+    },
     verLetter () {
       this.letter = {}
       this.dialogLetter = true
@@ -114,6 +133,7 @@ export default defineComponent({
     },
     onsubmit () {
       this.$api.post('letters', this.letter).then(res => {
+        console.log(res)
         this.dialogLetter = false
         this.getCerti()
       })
