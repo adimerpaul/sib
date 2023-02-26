@@ -2,7 +2,12 @@
   <q-page>
     <div class="row">
       <div class="col-12">
-        <q-table :loading="loading" :rows-per-page-options="[0]" :rows="inventaries" flat bordered dense :search="inventarySearch">
+        <q-table :loading="loading" :rows-per-page-options="[0]" :columns="inventaryColumns" :rows="inventaries" flat bordered dense :search="inventarySearch">
+          <template v-slot:header-cell="props">
+            <q-th :props="props" class="bg-primary text-white text-center">
+              {{ props.col.label }}
+            </q-th>
+          </template>
           <template v-slot:top-right>
             <q-btn label="Crear Categoria" color="primary" no-caps icon="add_circle_outline" @click="categoryCreate" dense />
             <q-btn color="green" label="Crear Activo" no-caps icon="add_circle_outline" @click="InvetaryAdd" dense />
@@ -16,18 +21,21 @@
           </template>
           <template v-slot:body-cell-actions="props">
             <q-td :props="props" auto-width>
-              <q-btn flat size="11px" class="q-pa-none q-ma-none" round @click="anularSale(props.row)" icon="highlight_off" dense color="red" title="Anular" v-if="props.row.status==='Cancelado'"/>
+              <q-btn-dropdown round dense color="primary" dropdown-icon="more_vert">
+                <q-list>
+                  <q-item clickable v-close-popup>
+                    <q-item-section @click="inventarieEdit(props.row)">Editar</q-item-section>
+                  </q-item>
+                  <q-item clickable v-close-popup>
+                    <q-item-section @click="inventarieDelete(props.row)">Eliminar</q-item-section>
+                  </q-item>
+                </q-list>
+              </q-btn-dropdown>
             </q-td>
           </template>
-          <template v-slot:body-cell-amount="props">
-            <q-td :props="props" auto-width>
-              <q-icon :name="`${props.row.type==='Ingreso'?'o_attach_money':'o_money_off'}`" :color="`${props.row.type==='Ingreso'?'green':'red'}`" />
-              <q-badge :label="props.row.type" :color="`${props.row.type==='Ingreso'?'green':'red'}`" /> {{props.row.amount}} Bs
-            </q-td>
-          </template>
-          <template v-slot:body-cell-status="props">
-            <q-td :props="props" auto-width>
-              <q-badge :color="`${props.row.status==='Cancelado'?'green':'red'}`" :label="`${props.row.status}`" />
+          <template v-slot:body-cell-imagen="props">
+            <q-td :props="props" auto-width @click="showImage(`${$url}../images/${props.row.image}`)">
+              <q-img :src="`${$url}../images/${props.row.image}`" style="width: 50px; height: 50px;" />
             </q-td>
           </template>
         </q-table>
@@ -163,12 +171,14 @@ export default {
       inventarySearch: '',
       inventaryColumns: [
         { name: 'actions', label: 'Acciones', field: 'actions', align: 'left', sortable: false },
-        { name: 'amount', label: 'Monto', field: 'amount', align: 'left', sortable: true },
+        { name: 'code', label: 'Codigo', field: 'code', align: 'left', sortable: true },
+        { name: 'imagen', label: 'Imagen', field: 'image', align: 'left', sortable: true },
         { name: 'name', label: 'Nombre', field: 'name', align: 'left', sortable: true },
-        { name: 'status', label: 'Estado', field: 'status', align: 'left', sortable: true },
-        { name: 'date', label: 'Fecha', field: 'date', align: 'left', sortable: true },
-        { name: 'time', label: 'Hora', field: 'time', align: 'left', sortable: true },
-        { name: 'user', label: 'Usuario', field: (row) => row.user.name, align: 'left', sortable: true }
+        { name: 'description', label: 'Descripcion', field: 'description', align: 'left', sortable: true },
+        // { name: 'price', label: 'Precio', field: 'price', align: 'left', sortable: true },
+        // { name: 'quantity', label: 'Cantidad', field: 'quantity', align: 'left', sortable: true },
+        { name: 'category', label: 'Categoria', field: (row) => row.category.name, align: 'left', sortable: true },
+        { name: 'user', label: 'Usuario', field: (row) => row.user == null ? '' : row.user.name, align: 'left', sortable: true }
       ],
       categoryColumns: [
         { name: 'actions', label: 'Acciones', field: 'actions', align: 'left', sortable: false },
@@ -184,6 +194,15 @@ export default {
     this.usersGet()
   },
   methods: {
+    showImage (image) {
+      this.$q.dialog({
+        title: 'Imagen',
+        html: true,
+        message: `<img src="${image}" />`,
+        cancel: true,
+        persistent: true
+      })
+    },
     uploadingFn (e) {
       e.xhr.onload = () => {
         if (e.xhr.readyState === e.xhr.DONE) {

@@ -12,6 +12,7 @@ import Activos from 'pages/Activos.vue'
 import Cargos from 'pages/Cargos.vue'
 import Planillas from 'pages/Planillas.vue'
 import Reportes from 'pages/Reportes.vue'
+import Correspondencia from 'pages/Correspondencia.vue'
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
@@ -27,7 +28,8 @@ const routes: RouteRecordRaw[] = [
       { path: 'activos', component: Activos, meta: { requiresAuth: true } },
       { path: 'cargos', component: Cargos, meta: { requiresAuth: true } },
       { path: 'planillas', component: Planillas, meta: { requiresAuth: true } },
-      { path: 'reportes', component: Reportes, meta: { requiresAuth: true } }
+      { path: 'reportes', component: Reportes, meta: { requiresAuth: true } },
+      { path: 'correspondencia', component: Correspondencia, meta: { requiresAuth: true } }
     ]
   },
   {

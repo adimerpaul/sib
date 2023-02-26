@@ -17,10 +17,10 @@
                       </q-avatar>
                     </div>
                     <div class="col-12">
-                      <q-input outlined v-model="user.email" label="Email" type="email" :rules="[val => val && val.length > 0 || 'Email requerido']" />
+                      <q-input outlined v-model="user.email" label="Email o RNI" :rules="[val => val && val.length > 0 || 'Email requerido']" />
                     </div>
                     <div class="col-12">
-                      <q-input outlined v-model="user.password" label="Contraseña" :type="showPassword ? 'text' : 'password'" :rules="[val => val && val.length > 0 || 'Contraseña requerida']">
+                      <q-input outlined v-model="user.password" label="Contraseña o CI" :type="showPassword ? 'text' : 'password'" :rules="[val => val && val.length > 0 || 'Contraseña requerida']">
                         <template v-slot:append>
                           <q-icon :name="showPassword ? 'visibility' : 'visibility_off'" class="cursor-pointer" @click="showPassword = !showPassword" />
                         </template>
