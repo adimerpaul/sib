@@ -22,8 +22,8 @@ Route::post('upload/{id}/{type}', [\App\Http\Controllers\UploadController::class
 Route::apiResource('cogs', \App\Http\Controllers\CogController::class);
 Route::get('certificado/{user}', [\App\Http\Controllers\CertificadoController::class,'certificado']);
 Route::get('generarPdf/{mes}/{anio}', [\App\Http\Controllers\PayrollController::class,'generarPdf']);
-Route::apiResource('users', \App\Http\Controllers\UserController::class);
 Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::apiResource('users', \App\Http\Controllers\UserController::class);
     Route::apiResource('roles', \App\Http\Controllers\RoleController::class);
     Route::apiResource('files', \App\Http\Controllers\FileController::class);
     Route::apiResource('sales', \App\Http\Controllers\SaleController::class);
@@ -34,6 +34,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::apiResource('payrolls', \App\Http\Controllers\PayrollController::class);
     Route::apiResource('attendance', \App\Http\Controllers\AttendanceController::class);
     Route::apiResource('letters', \App\Http\Controllers\LetterController::class);
+    Route::apiResource('mails', \App\Http\Controllers\MailController::class);
     Route::post('listLetter', [\App\Http\Controllers\LetterController::class,'listLetter']);
     Route::get('base64/{imagen}', [\App\Http\Controllers\UploadController::class,'base64']);
     Route::post('reporteIG', [\App\Http\Controllers\ReportController::class,'reporteIG']);

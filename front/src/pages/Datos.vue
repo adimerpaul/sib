@@ -14,52 +14,52 @@
               <div class="col-12 col-md-7">
                 <div class="row">
                   <div class="col-6 col-md-3">
-                    <q-input outlined dense v-model="user.paterno" label="Apellido Paterno" :rules="[val => val && Object.keys(val).length > 0 || 'Apellido Paterno requerido']" />
+                    <q-input outlined :loading="loading" dense v-model="user.paterno" label="Apellido Paterno" :rules="[val => val && Object.keys(val).length > 0 || 'Apellido Paterno requerido']" />
                   </div>
                   <div class="col-6 col-md-3">
-                    <q-input outlined dense v-model="user.materno" label="Apellido Materno" />
+                    <q-input outlined :loading="loading" dense v-model="user.materno" label="Apellido Materno" />
                   </div>
                   <div class="col-6 col-md-3">
-                    <q-input outlined dense v-model="user.nombres" label="Nombres" :rules="[val => val && Object.keys(val).length > 0 || 'Nombres requerido']" />
+                    <q-input outlined :loading="loading" dense v-model="user.nombres" label="Nombres" :rules="[val => val && Object.keys(val).length > 0 || 'Nombres requerido']" />
                   </div>
                   <div class="col-6 col-md-3">
-                    <q-input outlined dense v-model="user.email" label="Email" :rules="[val => val && Object.keys(val).length > 0 || 'Email requerido']" />
+                    <q-input outlined :loading="loading" dense v-model="user.email" label="Email" :rules="[val => val && Object.keys(val).length > 0 || 'Email requerido']" />
                   </div>
                   <div class="col-6 col-md-3">
-                    <q-input outlined dense type="date" v-model="user.fechaNac" label="Fecha Nacimiento" :rules="[val => val && Object.keys(val).length > 0 || 'Fecha Nacimiento requerido']" />
+                    <q-input outlined :loading="loading" dense type="date" v-model="user.fechaNac" label="Fecha Nacimiento" :rules="[val => val && Object.keys(val).length > 0 || 'Fecha Nacimiento requerido']" />
                   </div>
                   <div class="col-6 col-md-3">
-                    <q-select outlined dense v-model="user.departamento" :options="departamentos" label="Departamento" />
+                    <q-select outlined :loading="loading" dense v-model="user.departamento" :options="departamentos" label="Departamento" />
                   </div>
                   <div class="col-6 col-md-3">
-                    <q-input outlined dense v-model="user.nacimiento" label="Lugar Nacimiento" />
+                    <q-input outlined :loading="loading" dense v-model="user.nacimiento" label="Lugar Nacimiento" />
                   </div>
                   <div class="col-6 col-md-3">
-                    <q-select outlined dense v-model="user.sexo" :options="['M','F']" label="Sexo" />
+                    <q-select outlined :loading="loading" dense v-model="user.sexo" :options="['M','F']" label="Sexo" />
                   </div>
                   <div class="col-6 col-md-3">
-                    <q-input outlined dense v-model="user.zona" label="Zona" hint=""/>
+                    <q-input outlined :loading="loading" dense v-model="user.zona" label="Zona" hint=""/>
                   </div>
                   <div class="col-6 col-md-6">
-                    <q-input outlined dense v-model="user.direccion" label="Dirección" hint=""/>
+                    <q-input outlined :loading="loading" dense v-model="user.direccion" label="Dirección" hint=""/>
                   </div>
                   <div class="col-6 col-md-3">
-                    <q-input outlined dense v-model="user.telefono" label="Telefono" hint=""/>
+                    <q-input outlined :loading="loading" dense v-model="user.telefono" label="Telefono" hint=""/>
                   </div>
                   <div class="col-6 col-md-3">
-                    <q-input outlined dense v-model="user.oficina" label="Oficina" hint=""/>
+                    <q-input outlined :loading="loading" dense v-model="user.oficina" label="Oficina" hint=""/>
                   </div>
                   <div class="col-6 col-md-3">
-                    <q-input outlined dense v-model="user.celular" label="Celular" hint=""/>
+                    <q-input outlined :loading="loading" dense v-model="user.celular" label="Celular" hint=""/>
                   </div>
                   <div class="col-6 col-md-3">
-                    <q-input outlined dense v-model="user.especialidad" label="Especialidad" hint=""/>
+                    <q-input outlined :loading="loading" dense v-model="user.especialidad" label="Especialidad" hint=""/>
                   </div>
                   <div class="col-6 col-md-3">
-                    <q-input outlined dense v-model="user.fechaDiploma" label="Fecha Diploma" hint=""/>
+                    <q-input outlined :loading="loading" dense v-model="user.fechaDiploma" label="Fecha Diploma" hint=""/>
                   </div>
-                  <div class="col-6 col-md-3">
-                    <q-input outlined dense v-model="user.universidad" label="Universidad" hint=""/>
+                  <div class="col-6 col-md-6">
+                    <q-input outlined :loading="loading" dense v-model="user.universidad" label="Universidad" hint=""/>
                   </div>
                   <div class="col-12">
                     <div class="col-12 flex flex-center" v-if="userCreate=='create'">
@@ -77,14 +77,14 @@
                     </div>
                   </div>
                   <div class="col-6" v-if="userCreate=='create'">
-                    <q-input :type="showPassword ? 'text' : 'password'" outlined dense v-model="user.password" label="Password" :rules="[val => val && Object.keys(val).length > 0 || 'Password requerido']" >
+                    <q-input :type="showPassword ? 'text' : 'password'" outlined :loading="loading" dense v-model="user.password" label="Password" :rules="[val => val && Object.keys(val).length > 0 || 'Password requerido']" >
                       <template v-slot:append>
                         <q-icon :name="showPassword ? 'visibility' : 'visibility_off'" class="cursor-pointer" @click="showPassword = !showPassword" />
                       </template>
                     </q-input>
                   </div>
                   <div class="col-6" v-if="userCreate=='create'">
-                    <q-input :type="showPassword ? 'text' : 'password'" outlined dense v-model="user.confirm_password" label="Confirmar Password" :rules="[val => val && Object.keys(val).length > 0 || 'Confirmar Password requerido', val => val === user.password || 'Las contraseñas no coinciden']">
+                    <q-input :type="showPassword ? 'text' : 'password'" outlined :loading="loading" dense v-model="user.confirm_password" label="Confirmar Password" :rules="[val => val && Object.keys(val).length > 0 || 'Confirmar Password requerido', val => val === user.password || 'Las contraseñas no coinciden']">
                       <template v-slot:append>
                         <q-icon :name="showPassword ? 'visibility' : 'visibility_off'" class="cursor-pointer" @click="showPassword = !showPassword" />
                       </template>
@@ -177,19 +177,25 @@ export default defineComponent({
   },
   mounted () {
     // this.getUsers()
+    this.loading = true
+    setTimeout(() => {
+      this.$api.get('users/' + this.$store.user.id).then((res) => {
+        if (res.data.lat == null) {
+          res.data.lat = -17.970
+          res.data.lng = -67.1111
+        }
+        const roles = res.data.roles.map((role) => role.id)
+        res.data.roles = []
+        roles.forEach((role) => {
+          res.data.roles.push(role)
+        })
+        this.userEdit(res.data)
+      }).finally(() => {
+        this.loading = false
+      })
+    }, 1500)
     this.userCreate = 'edit'
-    this.$api.get('users/' + this.$store.user.id).then((res) => {
-      if (res.data.lat == null) {
-        res.data.lat = -17.970
-        res.data.lng = -67.1111
-      }
-      // const roles = res.data.roles.map((role) => role.id)
-      // res.data.roles = []
-      // roles.forEach((role) => {
-      //   res.data.roles.push(role)
-      // })
-      this.userEdit(res.data)
-    })
+
     // this.$api.get('roles').then((res) => {
     //   this.roles = []
     //   res.data.forEach((item) => {
@@ -198,6 +204,9 @@ export default defineComponent({
     // })
   },
   methods: {
+    makeAlert () {
+      alert('Hello')
+    },
     showPhoto (photo) {
       this.$q.dialog({
         html: true,
@@ -257,7 +266,7 @@ export default defineComponent({
             icon: 'cloud_done',
             message: 'Usuario eliminado'
           })
-          this.getUsers()
+          // this.getUsers()
           this.loading = false
         }).catch(() => {
           this.$q.notify({
@@ -285,21 +294,21 @@ export default defineComponent({
         this.markerLatLng = e.latlng
       }
     },
-    getUsers () {
-      this.loading = true
-      this.$api.get('users/colegiado').then((response) => {
-        this.loading = false
-        this.users = []
-        response.data.forEach((item) => {
-          const roles = item.roles.map((role) => role.id)
-          item.roles = []
-          roles.forEach((role) => {
-            item.roles.push(role)
-          })
-          this.users.push(item)
-        })
-      })
-    },
+    // getUsers () {
+    //   this.loading = true
+    //   this.$api.get('users/colegiado').then((response) => {
+    //     this.loading = false
+    //     this.users = []
+    //     response.data.forEach((item) => {
+    //       const roles = item.roles.map((role) => role.id)
+    //       item.roles = []
+    //       roles.forEach((role) => {
+    //         item.roles.push(role)
+    //       })
+    //       this.users.push(item)
+    //     })
+    //   })
+    // },
     userAdd () {
       this.userCreate = 'create'
       this.userDialog = true
@@ -324,7 +333,7 @@ export default defineComponent({
         this.$api.post('users', this.user).then(() => {
           this.loading = false
           this.userDialog = false
-          this.getUsers()
+          // this.getUsers()
         }).catch((error) => {
           this.$q.notify({
             message: error.response.data.message,
@@ -339,7 +348,7 @@ export default defineComponent({
           console.log(response.data)
           this.loading = false
           this.userDialog = false
-          this.getUsers()
+          // this.getUsers()
         }).catch((error) => {
           this.$q.notify({
             message: error.response.data.message,

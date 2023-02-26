@@ -7,11 +7,13 @@ use App\Http\Requests\StoreInventoryRequest;
 use App\Http\Requests\UpdateInventoryRequest;
 
 class InventoryController extends Controller{
-    public function index(){ return Inventory::all();}
+    public function index(){
+        return Inventory::with('category')->with('user')->get();
+    }
     public function show(Inventory $inventory){ return $inventory;}
     public function store(StoreInventoryRequest $request){
         if ($request->image=='' || $request->image==null) {
-            $request->image = 'default.png';
+            $request->merge(['image'=>'default.png']);
         }
         return Inventory::create($request->all());
     }

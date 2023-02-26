@@ -12,19 +12,21 @@ class UserController extends Controller
     {
         if ($request->isMethod('post')) {
             $this->validate($request, [
-                'email' => 'required|email',
+                'email' => 'required',
                 'password' => 'required'
             ]);
             $user= User::where('email', $request->email)->with('roles')->first();
-            if ($user) {
-                if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+            if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+                $token =  $user->createToken('web')->plainTextToken;
+                return response()->json(['token' => $token,"user" => $user], 200);
+            } else {
+                $user = User::where('rni', $request->email)->where('ci', $request->password)->with('roles')->first();
+                if ($user) {
                     $token =  $user->createToken('web')->plainTextToken;
                     return response()->json(['token' => $token,"user" => $user], 200);
-                } else {
-                    return response()->json(['message' => 'Contraseña incorrecta'], 401);
+                }else {
+                    return response()->json(['message' => 'Usuario o contraseña incorrectos'], 401);
                 }
-            } else {
-                return response()->json(['message' => 'Usuario no encontrado'], 401);
             }
         }
     }

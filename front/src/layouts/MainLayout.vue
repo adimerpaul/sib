@@ -21,7 +21,8 @@
         <div>
           <q-btn dense flat aria-label="Menu" no-caps icon-right="arrow_drop_down">
           <q-avatar>
-            <q-img v-if="$store.user.avatar!=undefined"  :src="`${$url}../images/${$store.user.avatar}`" width="50px"/>
+            <q-img v-if="$store.user.avatar!=undefined && $store.user.avatar!='avatar.png'"  :src="`${$url}../images/${$store.user.avatar}`" width="50px"/>
+            <q-icon v-else name="account_circle" />
           </q-avatar>
             <q-menu>
               <q-list>
@@ -184,6 +185,13 @@ export default defineComponent({
           icon: 'receipt_long',
           link: '/reportes',
           visible: 'administrador'
+        },
+        {
+          title: 'Modulo de correspondencia general',
+          caption: 'correspondencia',
+          icon: 'o_mail',
+          link: '/correspondencia',
+          visible: 'true'
         }
       ],
       leftDrawerOpen: false
