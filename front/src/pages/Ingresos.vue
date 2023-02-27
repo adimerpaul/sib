@@ -98,7 +98,8 @@
         <q-form @submit="onSubmit">
           <q-input outlined dense v-model="sale.name" label="Nombre" hint="" :rules="[val => val.length > 0 || 'El nombre es requerido']" />
           <q-input outlined dense v-model="sale.amount" label="Monto (Bs)" mask="#" reverse-fill-mask  :rules="[val => val.length > 0 || 'El monto es requerido']" />
-<!--          <q-input outlined dense v-model="sale.date" type="date" label="Fecha" />-->
+          <q-input outlined dense v-model="sale.date" type="date" label="Fecha" :rules="[val => val.length > 0 || 'La fecha es requerida']" />
+          <q-input outlined dense v-model="sale.time" type="time" label="Hora" :rules="[val => val.length > 0 || 'La hora es requerida']" />
 <!--          <q-input outlined dense v-model="sale.status" label="Estado" />-->
           <q-input outlined dense v-model="sale.description" label="Descripción" />
           <div class="row">
@@ -135,7 +136,9 @@ export default {
         amount: 0,
         status: '',
         type: '',
-        description: ''
+        description: '',
+        date: date.formatDate(new Date(), 'YYYY-MM-DD'),
+        time: date.formatDate(new Date(), 'HH:mm')
       },
       salesSearch: '',
       dateIni: date.formatDate(new Date(), 'YYYY-MM-DD'),
@@ -242,7 +245,9 @@ export default {
         amount: '',
         status: 'Cancelado',
         type: 'Ingreso',
-        description: ''
+        description: '',
+        date: date.formatDate(new Date(), 'YYYY-MM-DD'),
+        time: date.formatDate(new Date(), 'HH:mm')
       }
     },
     addEgreso () {
@@ -251,10 +256,10 @@ export default {
         name: 'EGRESO POR COMPRA',
         amount: '',
         date: date.formatDate(new Date(), 'YYYY-MM-DD'),
+        time: date.formatDate(new Date(), 'HH:mm'),
         status: 'Cancelado',
         type: 'Egreso',
-        description: '',
-        user_id: this.$store.user.id
+        description: ''
       }
     }
   },

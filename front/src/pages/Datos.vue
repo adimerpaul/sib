@@ -14,22 +14,28 @@
               <div class="col-12 col-md-7">
                 <div class="row">
                   <div class="col-6 col-md-3">
-                    <q-input outlined :loading="loading" dense v-model="user.paterno" label="Apellido Paterno" :rules="[val => val && Object.keys(val).length > 0 || 'Apellido Paterno requerido']" />
+                    <q-input outlined readonly :loading="loading" dense v-model="user.paterno" label="Apellido Paterno" :rules="[val => val && Object.keys(val).length > 0 || 'Apellido Paterno requerido']" />
                   </div>
                   <div class="col-6 col-md-3">
-                    <q-input outlined :loading="loading" dense v-model="user.materno" label="Apellido Materno" />
+                    <q-input outlined readonly :loading="loading" dense v-model="user.materno" label="Apellido Materno" />
                   </div>
                   <div class="col-6 col-md-3">
-                    <q-input outlined :loading="loading" dense v-model="user.nombres" label="Nombres" :rules="[val => val && Object.keys(val).length > 0 || 'Nombres requerido']" />
+                    <q-input outlined readonly :loading="loading" dense v-model="user.rni" label="R.N.I" />
                   </div>
                   <div class="col-6 col-md-3">
-                    <q-input outlined :loading="loading" dense v-model="user.email" label="Email" :rules="[val => val && Object.keys(val).length > 0 || 'Email requerido']" />
+                    <q-input outlined readonly :loading="loading" dense v-model="user.ci" label="C.I" />
                   </div>
                   <div class="col-6 col-md-3">
-                    <q-input outlined :loading="loading" dense type="date" v-model="user.fechaNac" label="Fecha Nacimiento" :rules="[val => val && Object.keys(val).length > 0 || 'Fecha Nacimiento requerido']" />
+                    <q-input outlined readonly :loading="loading" dense v-model="user.nombres" label="Nombres" :rules="[val => val && Object.keys(val).length > 0 || 'Nombres requerido']" />
                   </div>
                   <div class="col-6 col-md-3">
-                    <q-select outlined :loading="loading" dense v-model="user.departamento" :options="departamentos" label="Departamento" />
+                    <q-input outlined readonly :loading="loading" dense v-model="user.email" label="Email" :rules="[val => val && Object.keys(val).length > 0 || 'Email requerido']" />
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <q-input outlined readonly :loading="loading" dense type="date" v-model="user.fechaNac" label="Fecha Nacimiento" :rules="[val => val && Object.keys(val).length > 0 || 'Fecha Nacimiento requerido']" />
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <q-select outlined readonly :loading="loading" dense v-model="user.departamento" :options="departamentos" label="Departamento" />
                   </div>
                   <div class="col-6 col-md-3">
                     <q-input outlined :loading="loading" dense v-model="user.nacimiento" label="Lugar Nacimiento" />

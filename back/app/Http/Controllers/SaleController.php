@@ -10,8 +10,8 @@ use Illuminate\Http\Request;
 class SaleController extends Controller{
     public function index(){}
     public function store(StoreSaleRequest $request){
-        $request['date'] = date('Y-m-d');
-        $request['time'] = date('H:i:s');
+//        $request['date'] = date('Y-m-d');
+//        $request['time'] = date('H:i:s');
         $request['user_id'] = $request->user()->id;
         return Sale::create($request->all());
     }

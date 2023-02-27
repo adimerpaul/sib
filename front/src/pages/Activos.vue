@@ -64,7 +64,7 @@
                 <q-input outlined dense v-model="inventary.description" label="Descripcion" hint="" :rules="[val => Object.keys(val).length > 0 || 'La descripcion es requerida']" />
               </div>
               <div class="col-12">
-                <q-input outlined dense v-model="inventary.price" label="Precio" hint="" :rules="[val => Object.keys(val).length > 0 || 'El precio es requerido']" />
+                <q-input outlined dense v-model="inventary.price" label="Precio" hint=""  type="number" :rules="[val => Object.keys(val).length > 0 || 'El precio es requerido']" />
               </div>
               <div class="col-12 flex flex-center">
                 <q-uploader
@@ -79,9 +79,9 @@
                   :url="`${$url}upload/1/shopUser`"
                   stack-label="upload image"/>
               </div>
-              <div class="col-12">
-                <q-input outlined dense v-model="inventary.quantity" label="Cantidad" hint="" :rules="[val => Object.keys(val).length > 0 || 'La cantidad es requerida']" />
-              </div>
+<!--              <div class="col-12">-->
+<!--                <q-input outlined dense v-model="inventary.quantity" label="Cantidad" hint="" :rules="[val => Object.keys(val).length > 0 || 'La cantidad es requerida']" />-->
+<!--              </div>-->
               <div class="col-12">
                 <q-select outlined dense v-model="inventary.user_id" :options="users" label="Usuario" option-label="name" option-value="id" emit-value map-options hint="" />
               </div>
