@@ -6,6 +6,7 @@
         Certificados
       </div>
     </div>
+    <!--
     <div class="col-6 flex flex-center">
       <q-btn
         type="a"
@@ -27,7 +28,7 @@
         target="_blank"
         no-caps
       />
-    </div>
+    </div>-->
     <div class="col-12">
       <q-table title="Treats" :rows="letters" :columns="colLetter" row-key="name" :search="letterSearch">
         <template v-slot:top-right>
