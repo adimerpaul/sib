@@ -40,12 +40,13 @@
        </template>
        <template v-slot:body-cell-opciones="props">
         <q-td :props="props">
-           <q-btn color="green" icon="check" dense v-if="props.row.status==='pendiente' && $store.roles.includes('administrador')" @click="validar(props.row)"/>
+           <q-btn color="green" icon="check" dense v-if="props.row.status==='pendiente' && store.roles.includes( 'administrador' )" @click="letter2=props.row; dialogVerificar=true; "/>
+           <q-btn color="info" icon="picture_as_pdf" v-if="props.row.status==='APROBADO'"  @click=" kardex (props.row)"/>
       </q-td>
      </template>
        <template v-slot:body-cell-status="props">
           <q-td :props="props">
-          <q-badge :color="props.row.status==='pendiente'?'red':'green'"  :label="props.row.status" />
+          <q-badge :color="props.row.status==='pendiente' || props.row.status==='RECHAZADO'?'red':'green'"  :label="props.row.status" />
         </q-td>
        </template>
     </q-table>
@@ -71,22 +72,42 @@
     </q-card-section>
     </q-card>
     </q-dialog>
+  <q-dialog v-model="dialogVerificar">
+    <q-card>
+    <q-card-section>
+    <div class="text-h6">APROBOBAR SOLICITUD</div>
+    </q-card-section>
+    <q-card-section>
+        <div class="row">
+          <div class="col-4"> <q-btn color="green"  label="APROBAR" @click="validar('APROBADO')"/></div>
+          <div class="col-4"> <q-btn color="red"  label="RECHAZAR" @click="validar('RECHAZADO')"/></div>
+          <div class="col-4"> <q-btn color="teal"  label="CANCELAR" v-close-popup /></div>
+        </div>
+    </q-card-section>
+    </q-card>
+  </q-dialog>
+  <div id="myelement" class="hidden"></div>
 
   </div>
 </q-page>
 </template>
 
 <script lang="ts">
+import { Printd } from 'printd'
+
 import { defineComponent } from 'vue'
+import { useCounterStore } from 'stores/example-store'
 
 export default defineComponent({
   name: 'CertificadosPage',
   data () {
     return {
       loading: false,
+      dialogVerificar: false,
       letters: [],
       letter: {},
-      store: '',
+      letter2: {},
+      store: useCounterStore(),
       colLetter: [
         { name: 'opciones', label: 'Opciones', field: 'opciones', align: 'left', sortable: true, style: 'width: 100px' },
         { name: 'date', label: 'Fecha', field: 'date', align: 'left', sortable: true },
@@ -104,26 +125,71 @@ export default defineComponent({
   },
   created () {
     this.getCerti()
+    console.log(this.store.roles)
   },
   methods: {
+    kardex (dato) {
+      const contenido = 'Al ingenierio(a) ' + dato.user.nombres + ' ' + dato.user.paterno + ' ' + dato.user.materno + ' con numero de cedula ' + dato.user.ci +
+       ' con numero de registro  RNI: ' + dato.user.rni + 'se acepta su solicitud por los motivos de ' + dato.description + ' en fecha de la solicitud ' + dato.date
+      let cadena = ''
+      cadena = `
+      <html>
+    <head>
+      <style>
+    .bold{font-weight: bold;}
+    .textPrint-h1{font-size: 20px;}
+    .textPrint-h5{font-size: 8px;}
+    .textPrint-h6{font-size: 7px;}
+    .p2{padding: 2px}
+    .underline{text-decoration: underline;}
+    .center{text-align: center;}
+    .right{text-align: right;}
+    .border{border: 1px solid black}
+    .collapse{border-collapse: collapse;}
+    .background{background: #edf2f7}
+    .overflow-visible {white-space: initial;}
+    .subrrayado{text-decoration: underline;}
+</style>  
+
+<meta http-equiv='content-type' content='text/html; utf-8'>
+</head>
+<body>
+<div style="font-size: 11px;font-family: sans-serif;">
+<table width="100%"  class="collapse" >
+<tr>
+    <td>
+    <img src="logoverde.png" alt="">
+    </td>
+    <td colspan="2">
+        <div class="p2 bold center textPrint-h1 ">
+            SOCIEDAD DE INGENIEROS DE BOLIVIA <br>
+            DEPARTAMENTAL ORURO
+        </div>
+    </td>
+</tr>
+<tr>
+
+    <td>
+
+    <td>
+    </td>
+    </td>
+</tr>
+</table>
+<br>`
+      cadena += '<div style="font-size: 18px"> ' + contenido + '</div> </div></body></html>'
+
+      document.getElementById('myelement').innerHTML = cadena
+      const d = new Printd()
+      d.print(document.getElementById('myelement'))
+    },
     validar (ped) {
-      this.$q.dialog({
-        title: 'APROBOBAR SOLICITUD',
-        message: 'Esta seguro de aprobar?',
-        cancel: true,
-        persistent: false
-      }).onOk(() => {
-        this.loading = true
-        this.$api.put('letters/' + ped.id, ped).then(res => {
-          this.getCerti()
-          this.loading = false
-        })
-      }).onOk(() => {
-        // console.log('>>>> second OK catcher')
-      }).onCancel(() => {
-        // console.log('>>>> Cancel')
-      }).onDismiss(() => {
-        // console.log('I am triggered on both OK and Cancel')
+      this.letter2.status = ped
+      this.loading = true
+      this.$api.put('letters/' + this.letter2.id, this.letter2).then(res => {
+        this.dialogVerificar = false
+        this.getCerti()
+        this.loading = false
       })
     },
     verLetter () {
@@ -131,7 +197,7 @@ export default defineComponent({
       this.dialogLetter = true
     },
     getCerti () {
-      const ver = this.$store.roles.includes('administrador')
+      const ver = this.store.roles.includes('administrador')
       this.$api.post('listLetter', { permiso: ver })
         .then(response => {
           console.log(response.data)
